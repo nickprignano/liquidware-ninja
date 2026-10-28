@@ -19,6 +19,14 @@ This knowledge base (`liquidware-ninja`) is the central second brain for all fou
 
 For how the four products behave across Physical PCs, Citrix CVAD/DaaS, Omnissa Horizon, Windows Server RDS, Azure Virtual Desktop, and Windows 365, see [platforms/multi-platform-matrix.md](../platforms/multi-platform-matrix.md).
 
+## Templates, toolkit, and field notes in this repo
+
+Alongside the knowledge base, `liquidware-ninja` ships:
+
+- **Templates (`templates/`):** FSLogix Portability coexistence guardrails (`profileunity/fslogix-portability-guardrails.json`), plain-text ProfileUnity configuration exports (`profileunity/sample-config-export.json`), FlexApp package manifests (`flexapp/flexapp-package.example.json`), Stratusphere Inspector and SpotCheck catalogs (`stratusphere/inspector-catalog.json`), and CommandCTRL multi-session security/privacy baselines (`commandctrl/multisession-baseline.json`).
+- **PowerShell toolkit (`scripts/tools/`):** `LiquidwareNinja.psm1` (`Test-LwPortabilityOverlap`, `Export-LwPortabilityRuleset`, `Compare-LwProfileUnityConfig`, `Test-LwFlexAppCandidate`, `New-LwFlexAppManifest`, `Get-LwAssignmentConflict`, `Get-LwSpotCheckThreshold`, `ConvertTo-LwApiUrl`, `Test-LwCommandCtrlBaseline`) and `Test-LwCidKeyHealth.ps1` (PS 5.1/7+ endpoint health check for the Stratusphere Connector ID Key).
+- **Technical blog & field notes (`blog/`):** Deep-dive engineering write-ups covering Entra-only AVD without storage keys, Stratusphere UX SpotCheck to git-backed Power BI PBIP/TMDL pipelines, and Windows Server RDS to Windows 11 multi-session Portability migrations.
+
 ## Where Liquidware publishes
 
 - **Product documentation:** [docs.liquidware.com](https://docs.liquidware.com). The site renders in the browser and has no RSS feed, so the curator can't watch it automatically; check it by hand when a page here depends on it.

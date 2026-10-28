@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths:
+      - 'blog/**'
       - 'scripts/tools/**'
       - 'templates/**'
       - 'tests/**'
@@ -11,6 +12,7 @@ on:
       - '.github/workflows/tools.yml'
   pull_request:
     paths:
+      - 'blog/**'
       - 'scripts/tools/**'
       - 'templates/**'
       - 'tests/**'
