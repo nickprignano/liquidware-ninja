@@ -1,0 +1,31 @@
+{
+  "schema": "liquidware-ninja-profileunity-config/v1",
+  "configName": "AVD-Win11-MultiSession-Prod",
+  "version": "6.8.7",
+  "exportedAt": "2026-10-28T00:00:00Z",
+  "iniSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "enabledModules": [
+    "Portability",
+    "ContextFilter",
+    "ApplicationRestrictions",
+    "PrivilegeElevation"
+  ],
+  "portabilityPaths": [
+    "%APPDATA%\\Notepad++",
+    "%APPDATA%\\SAP\\Common",
+    "%LOCALAPPDATA%\\Contoso\\ClaimsWorkbench"
+  ],
+  "contextFilters": [
+    {
+      "name": "AVD-Win11-MultiSession",
+      "condition": "OS == 'Windows 11 Enterprise multi-session'"
+    }
+  ],
+  "applicationRestrictions": [
+    "%USERPROFILE%\\Downloads\\*.exe",
+    "%LOCALAPPDATA%\\Temp\\*.ps1"
+  ],
+  "privilegeElevation": [
+    "C:\\Program Files\\Contoso\\LegacyUpdater\\updater.exe"
+  ]
+}

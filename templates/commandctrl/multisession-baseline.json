@@ -1,0 +1,13 @@
+{
+  "schema": "liquidware-ninja-commandctrl-baseline/v1",
+  "description": "Security, privacy, and telemetry coexistence baseline for Liquidware CommandCTRL on multi-session hosts (AVD, RDSH, Citrix, Horizon).",
+  "remoteControlDefaultEnabled": false,
+  "remoteShellDefaultEnabled": false,
+  "requireUserConsent": true,
+  "allowAgentOrAutomationAccess": false,
+  "minSamplingIntervalSeconds": 60,
+  "captureCommandLinesOnMultiSession": false,
+  "captureWindowTitlesOnMultiSession": false,
+  "captureBrowserUrlsOnMultiSession": false,
+  "disableHistoryWhenStratusphereActive": true
+}
