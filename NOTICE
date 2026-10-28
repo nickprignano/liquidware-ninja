@@ -1,0 +1,34 @@
+liquidware-ninja
+Copyright 2026 Nick Prignano and the liquidware-ninja contributors
+
+This repository is licensed under the MIT License (see LICENSE), except for the knowledge base
+tooling listed below, which keeps the Apache License, Version 2.0 (see LICENSE-APACHE).
+
+Knowledge base tooling adapted from 2ndbrain
+--------------------------------------------
+
+These paths are adapted from 2ndbrain (https://github.com/nickprignano/2ndbrain), Copyright 2026
+Nick Prignano and the 2ndbrain contributors, licensed under the Apache License, Version 2.0:
+
+  scripts/kb/
+  docs/knowledge/schema/
+  docs/knowledge/curation.md, docs/knowledge/experts.md, docs/knowledge/decisions/template.md
+  docs/2ndbrain/SPEC.md, docs/guardrails.md, AGENTS.md
+  .claude/skills/2ndbrain-kb/, skills/2ndbrain/
+  .github/workflows/kb-*.yml, .github/workflows/secrets.yml
+  .github/ISSUE_TEMPLATE/
+
+Changes: this knowledge base's topics and sources, its topic list in page.schema.json, and wording
+in the guardrails, curation and experts pages for this project.
+
+Third-party components
+----------------------
+
+This repository does not include, vendor or redistribute any third-party code or binaries.
+
+- Liquidware Stratusphere UX, ProfileUnity, FlexApp and CommandCTRL are products of Liquidware Labs, Inc.
+- The workflows run Gitleaks (MIT license) from its published container image.
+
+Liquidware, Stratusphere, ProfileUnity, FlexApp, Connector ID and CommandCTRL are trademarks of
+Liquidware Labs, Inc.; Azure, Microsoft Entra, Intune and FSLogix are trademarks of Microsoft.
+This is a personal project, not affiliated with or endorsed by Liquidware or Microsoft.

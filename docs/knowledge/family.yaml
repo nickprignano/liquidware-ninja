@@ -1,0 +1,53 @@
+# The knowledge base family: sibling KBs that share this KB's format and know about each other.
+# Schema: schema/family.schema.json, the same in every KB. How it works:
+# curation.md#staying-aligned-with-the-family. Add a sibling's repo once it's known, then add
+# its two sources in sources.toml.
+
+format_version: 1
+projects:
+- id: 2ndbrain
+  name: 2ndbrain
+  repo: nickprignano/2ndbrain
+  kb_path: docs/knowledge
+  role: reference
+  focus: The template that owns the family knowledge base format
+  owns: [the family knowledge base format, its scripts and schemas]
+  format_version: 1
+- id: avd-ops
+  name: avd-ops
+  repo: avd-ops/avd-ops
+  kb_path: docs/knowledge
+  role: member
+  focus: 'The front door for the AVD repos: avd-ops.dev, onboarding and user docs'
+  owns: [onboarding and user-facing docs for the AVD repos, the avd-ops.dev site and design system]
+  format_version: 1
+- id: nerdio-hcl
+  name: Nerdio HCL kit
+  repo: nickprignano/nerdio-hcl
+  kb_path: docs/knowledge
+  role: member
+  focus: Nerdio Manager on Azure Virtual Desktop, deployed with Terraform and Packer
+  owns: [Nerdio Manager, the nerdio/nme provider, this kit's Terraform and Packer]
+  format_version: 1
+- id: avd
+  name: AVD
+  repo: avd-ops/avd-second-brain
+  kb_path: docs/knowledge
+  role: member
+  focus: Azure Virtual Desktop itself
+  owns: [Azure Virtual Desktop platform, FSLogix, session host images in general]
+  format_version: 1
+- id: liquidware
+  name: Liquidware
+  self: true
+  repo: nickprignano/liquidware-ninja
+  kb_path: docs/knowledge
+  role: member
+  focus: Liquidware products across virtual and physical desktops (Stratusphere UX, ProfileUnity, FlexApp, CommandCTRL)
+  owns: [Liquidware products (Stratusphere UX, ProfileUnity, FlexApp, CommandCTRL), the Stratusphere API and SpotCheck methodology, how they fit with AVD, Citrix, Horizon and FSLogix, and the avd-liquidware and ux-assess toolkits]
+  format_version: 1
+- id: private-layer
+  name: Private layer
+  role: observer
+  focus: The maintainer's private wisdom layer. It reads the family through this hub and sends directives here as pull requests; its contents stay private
+  owns: [Directives to the family, through docs/knowledge/directives.yaml]

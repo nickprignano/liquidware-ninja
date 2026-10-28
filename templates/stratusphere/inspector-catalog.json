@@ -1,0 +1,105 @@
+{
+  "schema": "liquidware-ninja-inspector-catalog/v1",
+  "inspectors": [
+    {
+      "id": 0,
+      "name": "summary",
+      "description": "Users and machines overall summary",
+      "defaultBasis": "users",
+      "sampleColumns": ["user_name", "node_name", "cpu_used", "memory_used", "disk_queue"]
+    },
+    {
+      "id": 1,
+      "name": "applications",
+      "description": "Application load counts, load time and process consumption",
+      "defaultBasis": "applications",
+      "sampleColumns": ["application_name", "application_version", "process_name", "node_name", "user_name", "app_load_count", "application_load_time_avg"]
+    },
+    {
+      "id": 2,
+      "name": "connections",
+      "description": "Display protocol and remoting connection metrics",
+      "defaultBasis": "users",
+      "sampleColumns": ["user_name", "node_name", "protocol", "latency_avg"]
+    },
+    {
+      "id": 3,
+      "name": "hosts",
+      "description": "Hypervisor and virtualization host metrics",
+      "defaultBasis": "hosts",
+      "sampleColumns": ["host_name", "cpu_used", "memory_used"]
+    },
+    {
+      "id": 4,
+      "name": "machine_inventory",
+      "description": "Hardware, OS, CPU cores, memory and storage inventory",
+      "defaultBasis": "machines",
+      "sampleColumns": ["node_name", "os_version", "hw_make", "hw_model", "hw_type", "is_vm", "cpu_cores", "cpu_speed_mhz", "disk_size_gb", "memory_allocated", "last_boot_time"]
+    },
+    {
+      "id": 10,
+      "name": "login_details",
+      "description": "Logon duration and phase breakdown",
+      "defaultBasis": "users",
+      "sampleColumns": ["user_name", "node_name"]
+    }
+  ],
+  "spotCheckThresholds": [
+    {
+      "metric": "cpu_used_pct",
+      "threshold": 80.0,
+      "direction": "above",
+      "unit": "percent",
+      "source": "Liquidware SpotCheck"
+    },
+    {
+      "metric": "cpu_queue_avg",
+      "threshold": 2.0,
+      "direction": "above",
+      "unit": "threads_per_core",
+      "source": "Liquidware SpotCheck"
+    },
+    {
+      "metric": "memory_used_pct",
+      "threshold": 85.0,
+      "direction": "above",
+      "unit": "percent",
+      "source": "Liquidware SpotCheck"
+    },
+    {
+      "metric": "disk_queue_avg",
+      "threshold": 2.0,
+      "direction": "above",
+      "unit": "requests",
+      "source": "Liquidware SpotCheck"
+    },
+    {
+      "metric": "page_used_mb",
+      "threshold": 1024.0,
+      "direction": "above",
+      "unit": "MB",
+      "source": "Liquidware SpotCheck"
+    },
+    {
+      "metric": "app_load_time_avg_s",
+      "threshold": 5.0,
+      "direction": "above",
+      "unit": "seconds",
+      "source": "Liquidware SpotCheck"
+    },
+    {
+      "metric": "login_duration_s",
+      "threshold": 30.0,
+      "direction": "above",
+      "unit": "seconds",
+      "source": "Liquidware SpotCheck"
+    },
+    {
+      "metric": "ux_score",
+      "threshold": 70.0,
+      "direction": "below",
+      "unit": "score",
+      "source": "ux-assess default"
+    }
+  ]
+}

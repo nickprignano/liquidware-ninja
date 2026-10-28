@@ -1,0 +1,23 @@
+{
+  "schema": "liquidware-ninja-portability-guardrails/v1",
+  "description": "Paths that FSLogix Profile Containers or ODFC already persist or explicitly exclude on multi-session hosts. ProfileUnity Portability rulesets must not capture these paths when FSLogix is the profile container.",
+  "fslogixOwnedPaths": [
+    "%LOCALAPPDATA%\\Microsoft\\OneDrive",
+    "%LOCALAPPDATA%\\Microsoft\\Outlook",
+    "%LOCALAPPDATA%\\Microsoft\\Teams",
+    "%LOCALAPPDATA%\\Packages\\MSTeams_8wekyb3d8bbwe",
+    "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\Default\\Cache",
+    "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\Cache",
+    "%LOCALAPPDATA%\\Temp",
+    "%APPDATA%\\Microsoft\\Teams",
+    "%USERPROFILE%\\OneDrive"
+  ],
+  "allowedPortabilityRoots": [
+    "%APPDATA%",
+    "%LOCALAPPDATA%"
+  ],
+  "forbiddenModulesWhenFslogixActive": [
+    "ProfileDisk",
+    "VhdProfile"
+  ]
+}

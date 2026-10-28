@@ -1,0 +1,15 @@
+{
+  "schema": "liquidware-ninja-flexapp-package/v1",
+  "app": "contoso-reader",
+  "displayName": "Contoso Document Reader",
+  "version": "2.4.1",
+  "format": "VHDX",
+  "deliveryMode": "AvdAppAttach",
+  "assignmentPlane": "AvdControlPlane",
+  "sharePath": "\\\\stavdlzdevlwp001.file.core.windows.net\\appattach\\contoso-reader\\2.4.1\\contoso-reader.vhdx",
+  "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "sizeBytes": 536870912,
+  "osBuildCapturedOn": "win11-24h2-ent",
+  "fallbackInstallMethod": "intune-win32",
+  "ring": "QA"
+}
