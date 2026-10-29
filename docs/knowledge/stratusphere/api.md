@@ -3,24 +3,25 @@ title: "Stratusphere API"
 summary: "The Hub's read-only data API: request shape, inspectors, basis, parameters, authentication, output formats and ecosystem prior art"
 topic: stratusphere
 status: partial
-last_reviewed: 2026-10-28
+last_reviewed: 2026-10-29
 sources:
   - https://docs.liquidware.com/stratusphere/en-us/common/stratusphere-getting-started-api-guide/using-the-api.htm
   - https://docs.liquidware.com/stratusphere/en-us/common/stratusphere-getting-started-api-guide/accessing-api-and-documentation.htm
   - https://support.liquidware.com/hc/en-us/articles/21156817491981-Stratusphere-REST-API-Automation-using-PowerShell-Script
+  - https://docs.liquidware.com/stratusphere-671/en-us/security-addendum/hub-advanced-configuration.htm
 ---
 
 # Stratusphere API
 
-The Stratusphere Hub serves a read-only data API for what Stratusphere collects. Whether it can change Hub settings is *unverified*. Every Hub serves its own full option reference, examples, and per-inspector column catalog at `https://<hub>/lwl/api`—a real Hub's built-in documentation always wins over anything recorded here.
+The Stratusphere Hub serves a read-only data API for what Stratusphere collects; Liquidware's [Hub Advanced Configuration](https://docs.liquidware.com/stratusphere-671/en-us/security-addendum/hub-advanced-configuration.htm) describes every kind of API access as read-only, so Hub settings stay in the console ([hub-setup.md](hub-setup.md)). Every Hub serves its own full option reference, examples, and per-inspector column catalog at `https://<hub>/lwl/api`—a real Hub's built-in documentation always wins over anything recorded here.
 
 ## Request shape and authentication
 
 From Liquidware's [Using the API](https://docs.liquidware.com/stratusphere/en-us/common/stratusphere-getting-started-api-guide/using-the-api.htm) and [Accessing the API](https://docs.liquidware.com/stratusphere/en-us/common/stratusphere-getting-started-api-guide/accessing-api-and-documentation.htm) guides:
 
 - **Endpoint:** `https://<hub>/lwl/api?json={...}`, called with `GET` or `POST`.
-- **Required fields:** `inspector` (the data table ID) and `basis` (the group-by dimension, such as `users` returning `user_id` and `user_name`, or `machines` returning `node_id` and `node_name`). Without a time window, the default period is `yesterday`.
-- **Authentication:** Access is gated by a client IP allow list (**Hub Administration > Configuration > Security Settings**), optionally paired with HTTP Basic authentication as `username@domain`. The built-in `ssadmin` account cannot call the API; create a dedicated read-only API user ([hub-setup.md](hub-setup.md)).
+- **Fields:** only `inspector` (the data table, by ID or name such as `applications`) is required. `basis` sets the group-by dimension, such as `users` returning `user_id` and `user_name`, or `machines` returning `node_id` and `node_name`; several can be given as a list. Without a time window, the default period is `yesterday`.
+- **Authentication:** HTTP Basic as `username@domain`, for users with **Allow API Access** (Inventory > Users), from addresses on the API **Whitelist** (**Hub Administration > Configuration > Security Settings**). Addresses in **API Client IPs** skip authentication entirely, so keep that field empty ([hub-setup.md](hub-setup.md)).
 - **Output formats:** JSON, CSV, or Excel.
 
 ## Inspectors and parameters seen in public samples

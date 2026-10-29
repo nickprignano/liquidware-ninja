@@ -8,6 +8,54 @@ errors:
   cause: The key calls the address in its mgrcert.pem, taken from the Hub's DNS name when the installer was downloaded; the address is wrong or unreachable on TCP 443
   fix: Set the Hub's DNS name (Configuration > Edit Network Configuration), download the installer again and reinstall, or edit mgrcert.pem and restart the key's service; allow TCP 443 from the desktops to the Hub
   source: https://support.liquidware.com/hc/en-us/articles/210640563-My-Stratusphere-does-not-receive-the-data-from-systems-where-Connector-ID-is-installed
-  applies_to: Stratusphere FIT/UX, all versions per the article
-  status: unverified
+  applies_to: Stratusphere FIT/UX, all versions per the article; from 6.7 the program folder is C:\Program Files\Liquidware\Connector ID
+  status: verified
   added: '2026-10-18'
+- id: flexapp-second-user-no-app-multi-session
+  symptom: On a multi-session AVD host using FlexApp through app attach or RemoteApp, the first user's app launches but the next user's never does
+  cause: The Click-To-Layer engine's extra validation fails falsely for the second session
+  fix: As an administrator, set Validate to False in C:\Program Files\ProfileUnity\FlexApp\CTL\JitCut.dll.config, then restart the host to clear stuck sessions
+  source: https://support.liquidware.com/hc/en-us/articles/44141398744845-Second-user-gets-no-FlexApp-on-Multi-Session-AVD-using-AppAttach-RemoteApp
+  applies_to: ProfileUnity FlexApp 6.8.7 and later
+  status: verified
+  added: '2026-10-29'
+- id: stratusphere-api-license-not-authorized
+  symptom: '"License Not Authorized" from the Stratusphere API after the license was updated'
+  cause: The API module caches the previous license
+  fix: Restart the Hub appliance
+  source: https://support.liquidware.com/hc/en-us/articles/210641343-After-updating-the-license-API-access-returns-License-Not-Authorized-error
+  applies_to: Stratusphere FIT/UX 5.6 and later
+  status: verified
+  added: '2026-10-29'
+- id: kb-freshness-expert-yield-on-new-kb
+  symptom: 'kb-freshness lists every tracked expert as "nothing in the digests since <date>; check the feed still works" on a new KB'
+  cause: Expert yield was computed from digest issues before any existed, or before a newly scored expert had a month of digests
+  fix: freshness.py counts only digests since the expert was scored and skips the check until MIN_DIGESTS (4) exist
+  source: curation.md#freshness-check-kb-freshness
+  applies_to: KB scripts before 2026-10-29
+  status: verified
+  added: '2026-10-29'
+- id: kb-freshness-marker-count-wrong
+  symptom: kb-freshness counts unverified claims on a page whose only match is prose about the marker, and misses claims marked *(unverified)*
+  cause: The inline-marker regex matched the word inside instructions and bold **Unverified labels, and didn't allow a parenthesis after the asterisk
+  fix: The regex now matches *(unverified)* and skips bold labels; write prose that names the marker in backticks so it's ignored
+  source: curation.md#freshness-check-kb-freshness
+  applies_to: KB scripts before 2026-10-29
+  status: verified
+  added: '2026-10-29'
+- id: kb-scheduled-issues-never-close
+  symptom: Unticked kb-digest issues pile up week after week, and the kb-freshness issue stays open after every item is fixed
+  cause: The curator only opened digests and the freshness job only ran its issue step when items != 0; nothing closed an issue once it was stale or clean
+  fix: A new digest closes older open digests with nothing ticked, linking the new one; the freshness job closes its issue when the check finds 0 items
+  source: curation.md#weekly-digest-kb-curator
+  applies_to: KB workflows before 2026-10-29
+  status: verified
+  added: '2026-10-29'
+- id: kb-curator-feed-http-500
+  symptom: 'A curator source fails with "HTTPError: HTTP Error 500: Internal Server Error" (seen in the family on YouTube channel feeds)'
+  cause: The feed host returns transient 5xx responses
+  fix: sources.http_get retries a 5xx once after 5 seconds; a source that still fails is listed at the bottom of the digest
+  source: curation.md#weekly-digest-kb-curator
+  applies_to: KB scripts before 2026-10-29
+  status: verified
+  added: '2026-10-29'

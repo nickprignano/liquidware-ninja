@@ -2,8 +2,10 @@
 title: "Stratusphere in Azure Marketplace"
 summary: "Liquidware's Marketplace offer: finding the plan for a region, the plan block a VM needs, and accepting terms per subscription"
 topic: azure
-status: partial
-last_reviewed: 2026-10-18
+status: verified
+last_reviewed: 2026-10-29
+sources:
+  - https://learn.microsoft.com/azure/virtual-machines/marketplace-images
 ---
 
 # Stratusphere in Azure Marketplace
@@ -13,7 +15,11 @@ offer `stratusphere`. Three things have to line up before a VM deploys.
 
 1. **The plan (SKU) offered in your region.** Plan names aren't on the public listing. List them
    with `az vm image list-skus -l <region> -p liquidware -f stratusphere`, or
-   `Get-AzVMImageSku`. Which plans exist for the Database and Collector roles is *unverified*.
+   `Get-AzVMImageSku`. Liquidware publishes three plans: the Hub, and optional Database and
+   Collector plans, available in each region
+   ([Installing on Microsoft Azure](https://docs.liquidware.com/stratusphere-671/en-us/installation-guide/installing-on-microsoft.htm)).
+   The Hub plan is bring-your-own-license. The images are Gen 1 VMs, and Liquidware doesn't
+   support VM extensions or cloud-init on them.
 2. **A matching `plan` block.** The image carries a purchase plan, so the VM must send a `plan`
    (name, publisher, product) that matches its `imageReference`, or Azure refuses it. The repo's
    Pester tests guard this.

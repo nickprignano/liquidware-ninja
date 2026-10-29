@@ -11,7 +11,8 @@ Flags:
   - pages with unresolved "broke" or "outdated" field reports
   - known errors whose fix is still unverified
   - experts not re-scored in --max-age-days, and nominations waiting to be scored
-  - with --digests, each tracked expert's yield: digest items ticked as worth adding (experts.md)
+  - with --digests, each tracked expert's yield: digest items ticked as worth adding (experts.md),
+    once MIN_DIGESTS digests exist since the expert was scored
   - with --family, siblings on a different family format version, unreadable, or not linked yet
 
 Writes a Markdown checklist and, under GitHub Actions, items=<count> to GITHUB_OUTPUT.
@@ -37,7 +38,10 @@ from kblib import rel  # noqa: E402
 
 DIGEST_HEADING = re.compile(r"^### (.+?)(?: → .*)?$")
 DIGEST_ITEM = re.compile(r"^- \[([ xX])\] ")
-INLINE_UNVERIFIED = re.compile(r"\*(?:unverified|not verified)\b|not yet reviewed", re.I)
+MIN_DIGESTS = 4  # a month of weekly digests before a tracked expert's yield means anything
+# *unverified* and *(unverified)*, not a bold **Unverified label; prose that only names the
+# marker belongs in backticks.
+INLINE_UNVERIFIED = re.compile(r"(?<!\*)\*\(?(?:unverified|not verified)\b|not yet reviewed", re.I)
 
 
 def digest_yield(digests: list[dict], since: date) -> dict[str, list[int]]:
@@ -68,12 +72,17 @@ def expert_items(max_age_days: int, today: date, digests: list[dict] | None) -> 
             out["Experts to re-score"].append(f"{e['name']}: last scored {e['reviewed']}")
     if digests is None:
         return out
-    since = date.fromordinal(today.toordinal() - max_age_days)
-    counts = digest_yield(digests, since)
+    window = date.fromordinal(today.toordinal() - max_age_days)
     sources = tomllib.loads(kblib.SOURCES.read_text(encoding="utf-8")).get("source", [])
     for e in experts:
         if e["status"] != "tracked":
             continue
+        # Count only digests since the expert was scored, and wait until there are enough of them:
+        # a new KB, or a newly tracked expert, has no digests yet and would be flagged for nothing.
+        since = max(window, date.fromisoformat(e["reviewed"]))
+        if sum(date.fromisoformat(d["createdAt"][:10]) >= since for d in digests) < MIN_DIGESTS:
+            continue
+        counts = digest_yield(digests, since)
         names = [s["name"] for s in sources if s.get("expert") == e["id"]]
         ticked = sum(counts.get(n, [0, 0])[0] for n in names)
         listed = sum(counts.get(n, [0, 0])[1] for n in names)

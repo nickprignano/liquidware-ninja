@@ -16,7 +16,7 @@ param(
   [string[]] $ServiceName = @('tntgrd', 'LwL.ConnectorID'),
   [string[]] $InstallPaths = @(
     'C:\Program Files (x86)\Liquidware Labs\Connector ID',
-    'C:\Program Files\Liquidware Labs\Connector ID'
+    'C:\Program Files\Liquidware\Connector ID'
   ),
   [switch] $SkipNetworkCheck,
   [AllowEmptyCollection()] [string[]] $MockExistingPaths = $null,

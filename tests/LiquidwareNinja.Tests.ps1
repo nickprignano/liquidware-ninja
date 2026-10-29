@@ -265,6 +265,15 @@ Describe 'Test-LwCidKeyHealth.ps1' {
     $res.Checks.Count | Should -Be 3
   }
 
+  It 'finds the 6.7+ default install path' {
+    $res = & $script:CidScriptPath `
+      -SkipNetworkCheck `
+      -MockExistingPaths @('C:\Program Files\Liquidware\Connector ID') `
+      -MockServices @([pscustomobject]@{ Name = 'tntgrd'; Status = 'Running' }) `
+      -Quiet
+    $res.Status | Should -Be 'PASS'
+  }
+
   It 'returns FAIL when neither tntgrd nor LwL.ConnectorID service is installed' {
     $res = & $script:CidScriptPath `
       -SkipNetworkCheck `

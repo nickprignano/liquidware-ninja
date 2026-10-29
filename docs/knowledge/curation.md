@@ -3,7 +3,7 @@ title: "Keeping the knowledge base current"
 summary: "How the KB stays current: the weekly digest, the prior-art check, the feedback loop, the freshness check and family alignment"
 topic: curation
 status: verified
-last_reviewed: 2026-10-18
+last_reviewed: 2026-10-29
 ---
 
 # Keeping the knowledge base current
@@ -19,7 +19,9 @@ this KB aligned with its siblings.
 It reads [sources.toml](sources.toml), collects anything new from the last 8 days and opens an
 issue labelled **kb-digest** with a checklist grouped by source. Each source names the KB page its
 findings belong on. Items whose URL is already linked from the KB are left out. If nothing is new,
-no issue is opened.
+no issue is opened. When a new digest opens, older open digests with nothing ticked are closed with
+a link to it, so unread digests don't pile up; a digest with ticked items stays open until it's
+worked.
 
 Watched today:
 
@@ -33,8 +35,12 @@ product documentation at docs.liquidware.com, and the `stratusphere` offer in Az
 ([liquidware/products.md](liquidware/products.md)). People are chosen with the method in
 [experts.md](experts.md), and a blog feed is added only once a curator run shows it works.
 
-Working a digest: for each ticked item, add what matters to the page named next to the source
-(facts, versions, fixes; not a link dump), then close the issue.
+Working a digest: tick the items worth adding (an item can name its own page with
+`→ docs/knowledge/<page>.md` after it), then label the issue **kb-accepted**. The
+[feedback workflow](#feedback-loop-kb-feedback) adds the ticked links to their pages under "From the
+KB digest" and opens a pull request that closes the digest. Before merging, turn each link into what
+matters on the page (facts, versions, fixes; not a link dump). A digest with no ticked items, or a
+ticked item with no page, gets a comment instead of a PR.
 
 To watch something else, add a `[[source]]` table to [sources.toml](sources.toml). Supported
 kinds: `github_releases`, `github_commits` (optionally limited to one `path`), `github_issues`,
@@ -46,7 +52,8 @@ GITHUB_TOKEN=$(gh auth token) python3 scripts/kb/curate.py --since-days 30
 ```
 
 A source that fails (rate limit, site down) is listed at the bottom of the digest and doesn't
-stop the others.
+stop the others. A server error (HTTP 5xx) is retried once after 5 seconds first, since some feeds
+return transient 500s.
 
 ## Prior-art check (`kb-prior-art`)
 
@@ -65,20 +72,21 @@ The digest and prior-art scripts use only the Python standard library (3.11+).
 
 ## Feedback loop (`kb-feedback`)
 
-Real results flow back into the KB through three issue forms:
+Real results flow back into the KB through three issue forms, plus the weekly digest:
 
 - **Knowledge base feedback:** what worked, broke, went out of date or is missing, for one page
   (label `kb-feedback`).
 - **Known error:** an error, its cause and fix, for the [troubleshooting catalog](troubleshooting/README.md)
   (label `kb-known-error`).
 - **Suggest an expert to follow:** a nomination for the [experts study](experts.md) (label `kb-source`).
+- **Weekly digest:** ticked items (label `kb-digest`, see [above](#weekly-digest-kb-curator)).
 
 Each form has a required public-safe tick box. A maintainer reviews the issue and, if it's useful
 and public-safe, labels it **kb-accepted**.
 [`.github/workflows/kb-feedback.yml`](../../.github/workflows/kb-feedback.yml) then appends it to
 [field-reports.yaml](field-reports.yaml), [known-errors.yaml](troubleshooting/known-errors.yaml) or
-[experts.yaml](experts.yaml), regenerates and validates the KB, and opens a pull request that closes
-the issue. If the form is incomplete or fails validation, the workflow comments on the issue instead.
+[experts.yaml](experts.yaml) (or, for a digest, adds the ticked links to their pages), regenerates
+and validates the KB, and opens a pull request that closes the issue. If the form is incomplete or fails validation, the workflow comments on the issue instead.
 
 The label is the safety gate: issue text from anyone is only parsed as data, never executed, the PR
 still goes through review, and gitleaks and the KB checks run on it. Two one-time settings matter:
@@ -100,11 +108,14 @@ of each month and keeps one open issue labelled **kb-freshness** listing:
 - pages whose `last_reviewed` is more than 90 days old (pages with status `plan` are skipped)
 - pages with status `unverified` or `partial`, with the number of claims still marked *unverified*
 - known errors whose fix is still unverified
-- experts due for re-scoring, with each tracked expert's digest yield
+- experts due for re-scoring, with each tracked expert's digest yield (only once 4 digests exist
+  since the expert was scored, so a new KB or a newly tracked expert isn't flagged for nothing)
 - sibling KBs on a different family format version, or whose `family.yaml` can't be read
 
 Work it by re-checking each item against a primary source or a real run, then updating the page's
-text, `last_reviewed` and `status`. Run it locally with `python3 scripts/kb/freshness.py --family`.
+text, `last_reviewed` and `status`. When a run finds nothing left, it closes the open
+**kb-freshness** issue. Inline markers are `*unverified*` or `*(unverified)*`; when prose only talks
+about the marker, put it in backticks so it isn't counted as a claim. Run it locally with `python3 scripts/kb/freshness.py --family`.
 
 ## Staying aligned with the family
 
