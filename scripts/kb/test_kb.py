@@ -14,10 +14,12 @@ from unittest import mock
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build  # noqa: E402
 import capture_check  # noqa: E402
+import curate  # noqa: E402
 import feedback  # noqa: E402
 import freshness  # noqa: E402
 import handoffs  # noqa: E402
 import kblib  # noqa: E402
+import sources  # noqa: E402
 
 SAFE = "### Public-safe\n\n- [X] I removed API keys, account and workspace IDs, names, domains, emails, IP addresses and secrets.\n"
 
@@ -192,6 +194,122 @@ class FreshnessTests(TempData):
         self.assertTrue(any("stratusphere/appliances.md" in i for i in sections["Reported broken or outdated"]))
         self.assertTrue(sections["Stale"])
         self.assertFalse(any("roadmap/README.md" in i for i in sections["Stale"]))  # plan pages skip
+
+
+DIGEST_BODY = """New since 2026-10-20: **3** item(s) from 2 source(s). Tick what's worth adding to the KB, and note which page.
+
+### Liquidware support center → `docs/knowledge/liquidware/products.md`
+- [x] [Stratusphere 6.8 [hotfix] notes](https://support.example.com/a/1) · 2026-10-25 (updated)
+- [ ] [Unrelated](https://support.example.com/a/2) · 2026-10-24
+- [X] [Hub API change](https://support.example.com/a/3) · 2026-10-23 → docs/knowledge/stratusphere/api.md
+
+### A source with no page
+- [ ] [skipped](https://example.com/x) · 2026-10-22
+"""
+
+
+class DigestTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp())
+        for page in ("liquidware/products.md", "stratusphere/api.md"):
+            (self.tmp / page).parent.mkdir(parents=True, exist_ok=True)
+            (self.tmp / page).write_text("---\ntitle: x\n---\n\n# X\n", encoding="utf-8")
+        self.patch = mock.patch.object(feedback, "KB_DIR", self.tmp)
+        self.patch.start()
+
+    def tearDown(self):
+        self.patch.stop()
+        shutil.rmtree(self.tmp)
+
+    def issue(self, body, number=40):
+        return {"number": number, "body": body, "labels": [{"name": "kb-digest"}, {"name": "kb-accepted"}]}
+
+    def test_ticked_items_go_to_their_pages(self):
+        title, body = feedback.handle(self.issue(DIGEST_BODY), "2026-10-28")
+        self.assertIn("2 item(s) from #40", title)
+        products = (self.tmp / "liquidware/products.md").read_text()
+        self.assertIn("## From the KB digest", products)
+        self.assertIn("- [Stratusphere 6.8 (hotfix) notes](https://support.example.com/a/1) (2026-10-25, digest #40)", products)
+        self.assertNotIn("a/2", products)
+        self.assertIn("https://support.example.com/a/3", (self.tmp / "stratusphere/api.md").read_text())
+        self.assertIn("work each link into the page", body)
+        with self.assertRaises(feedback.FeedbackError):  # already linked: nothing new to add
+            feedback.handle(self.issue(DIGEST_BODY), "2026-10-28")
+
+    def test_rejects_unticked_unplaced_and_escapes(self):
+        with self.assertRaises(feedback.FeedbackError):
+            feedback.handle(self.issue(DIGEST_BODY.replace("[x]", "[ ]").replace("[X]", "[ ]")), "2026-10-28")
+        unplaced = DIGEST_BODY.replace("- [ ] [skipped]", "- [x] [skipped]")
+        with self.assertRaisesRegex(feedback.FeedbackError, "no page"):
+            feedback.handle(self.issue(unplaced), "2026-10-28")
+        escape = DIGEST_BODY.replace("→ docs/knowledge/stratusphere/api.md", "→ ../../AGENTS.md")
+        with self.assertRaisesRegex(feedback.FeedbackError, "under docs/knowledge"):
+            feedback.handle(self.issue(escape), "2026-10-28")
+        not_https = DIGEST_BODY.replace("https://support.example.com/a/1", "javascript:alert(1)").replace(
+            "[X]", "[ ]")
+        with self.assertRaises(feedback.FeedbackError):
+            feedback.handle(self.issue(not_https), "2026-10-28")
+
+
+class SupersedeTests(unittest.TestCase):
+    def test_only_older_unticked_digests(self):
+        open_digests = [
+            {"number": 3, "body": "### A\n- [ ] [a](https://a)\n"},
+            {"number": 5, "body": "### A\n- [x] [a](https://a)\n"},
+            {"number": 6, "body": None},
+            {"number": 9, "body": "### A\n- [ ] [new](https://n)\n"},
+        ]
+        self.assertEqual(curate.superseded(open_digests, 9), [3, 6])
+
+
+class ExpertYieldTests(unittest.TestCase):
+    def digests(self, n, start=date(2026, 11, 2)):
+        return [{"createdAt": date.fromordinal(start.toordinal() + 7 * i).isoformat() + "T13:00:00Z",
+                 "body": "### Somebody else\n- [ ] [x](https://x)\n"} for i in range(n)]
+
+    def test_no_yield_flags_on_a_new_kb(self):
+        today = date(2026, 11, 1)
+        self.assertEqual(freshness.expert_items(90, today, [])["Expert yield"], [])
+        self.assertEqual(freshness.expert_items(90, date(2026, 11, 20), self.digests(3))["Expert yield"], [])
+
+    def test_flags_once_enough_digests_exist(self):
+        out = freshness.expert_items(90, date(2026, 12, 1), self.digests(5))
+        self.assertTrue(any("nothing in the digests" in i for i in out["Expert yield"]))
+
+
+class HttpRetryTests(unittest.TestCase):
+    def error(self, code):
+        return sources.urllib.error.HTTPError("https://x", code, "err", {}, None)
+
+    def response(self):
+        resp = mock.MagicMock()
+        resp.__enter__.return_value.read.return_value = b"ok"
+        return resp
+
+    @mock.patch.object(sources.time, "sleep")
+    def test_retries_once_on_5xx(self, sleep):
+        with mock.patch.object(sources.urllib.request, "urlopen",
+                               side_effect=[self.error(500), self.response()]) as urlopen:
+            self.assertEqual(sources.http_get("https://x"), b"ok")
+        self.assertEqual(urlopen.call_count, 2)
+        sleep.assert_called_once()
+
+    @mock.patch.object(sources.time, "sleep")
+    def test_gives_up_after_one_retry_and_never_retries_4xx(self, sleep):
+        with mock.patch.object(sources.urllib.request, "urlopen", side_effect=[self.error(503)] * 2):
+            with self.assertRaises(sources.urllib.error.HTTPError):
+                sources.http_get("https://x")
+        with mock.patch.object(sources.urllib.request, "urlopen", side_effect=[self.error(404)]) as urlopen:
+            with self.assertRaises(sources.urllib.error.HTTPError):
+                sources.http_get("https://x")
+        self.assertEqual(urlopen.call_count, 1)
+
+
+class MarkerTests(unittest.TestCase):
+    def test_counts_markers_not_labels_or_code(self):
+        body = ("A *unverified* claim. Another *(unverified)*. **Unverified columns:** a label.\n"
+                "Mark claims with `*unverified*`.\n")
+        self.assertEqual(len(freshness.INLINE_UNVERIFIED.findall(kblib.strip_code(body))), 2)
 
 
 class BuildTests(unittest.TestCase):

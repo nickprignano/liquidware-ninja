@@ -3,22 +3,22 @@ title: "FlexApp packaging, VHDX/CimFS and App Attach delivery"
 summary: "How FlexApp packages applications into elastic layers and delivers them natively or through AVD App Attach"
 topic: flexapp
 status: partial
-last_reviewed: 2026-10-28
+last_reviewed: 2026-10-29
 sources:
   - https://docs.liquidware.com/profileunity/en-us/695/flexapp-packaging-console-guide/welcome.htm
 ---
 
 # FlexApp packaging, VHDX/CimFS and App Attach delivery
 
-**Liquidware FlexApp** decouples applications from the base OS image by capturing installers into virtualized disks (VHDX or CimFS) and filter-driver metadata so apps appear native to the OS without baking them into golden images.
+**Liquidware FlexApp** decouples applications from the base OS image by capturing installers into virtualized disks (VHDX; CimFS as a FlexApp format is *unverified*) and filter-driver metadata so apps appear native to the OS without baking them into golden images.
 
 ## Delivery modes
 
 | Mode | How it mounts and activates | Best for |
 |---|---|---|
 | **Native FlexApp (via ProfileUnity Client)** | ProfileUnity client mounts the VHDX/CimFS from an SMB share or cloud storage at logon or click-to-layer and applies registry/file filter rules | Citrix CVAD/DaaS, Omnissa Horizon, RDS, physical PCs, or AVD when context-aware filters inside ProfileUnity drive assignment |
-| **AVD App Attach integration** | FlexApp package VHDX is stored on an Azure Files share (`appattach`) and registered as a `Microsoft.DesktopVirtualization/appAttachPackages` resource assigned to host pools and Entra groups | Azure Virtual Desktop where Azure control-plane visibility, RBAC, and host-pool-level lifecycle are preferred |
-| **FlexApp One** | Bundles the captured layer into a self-contained `.exe` that can run offline or be distributed via Intune, SCCM, or cloud storage without the full console stack | Physical laptops, offline/disconnected endpoints, or Intune-managed Windows 365 / AVD hosts |
+| **AVD App Attach integration** | FlexApp package VHDX is stored on an Azure Files share (`appattach`) and registered as a `Microsoft.DesktopVirtualization/appAttachPackages` resource assigned to host pools and Entra groups; FlexApp inventory syncs with AVD app attach from 6.8.7 ([6.8.7 announcement](https://support.liquidware.com/hc/en-us/articles/32074165322765-Announcing-ProfileUnity-FlexApp-6-8-7-Elevate-Your-Workspace-Management)) | Azure Virtual Desktop where Azure control-plane visibility, RBAC, and host-pool-level lifecycle are preferred |
+| **FlexApp One** | Bundles the captured layer into a self-contained `.exe` ([command line reference](https://support.liquidware.com/hc/en-us/articles/45348265831565-FlexApp-One-Command-Line-Reference)) that can run offline or be distributed via Intune, SCCM, or cloud storage without the full console stack | Physical laptops, offline/disconnected endpoints, or Intune-managed Windows 365 / AVD hosts |
 
 ## The single assignment system rule
 

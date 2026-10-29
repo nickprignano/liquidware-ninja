@@ -26,4 +26,5 @@ the family numbers its own decisions; refer to a sibling's as `<project> 0012`, 
 | [0015](0015-family-format-handoff-issues.md) | Take handoffs from other Claude projects as `handoff` issues | Accepted |
 | [0016](0016-family-format-github-work-conventions.md) | Follow the family's GitHub work conventions, with low-risk PRs merging themselves | Proposed |
 | [0017](0017-consolidate-liquidware-second-brain-in-liquidware-ninja.md) | Consolidate the Liquidware second brain and toolkit in liquidware-ninja | Accepted |
+| [0018](0018-family-format-close-scheduled-issue-loops.md) | Family format: every scheduled KB issue has a way to a pull request or to closing itself | Proposed |
 <!-- END GENERATED: decision-index -->

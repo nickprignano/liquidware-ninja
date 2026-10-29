@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Turn an accepted KB feedback or known-error issue into a change to the KB's YAML data.
+"""Turn an accepted KB feedback, known-error, nomination or digest issue into a KB change.
 
 Run by .github/workflows/kb-feedback.yml when a maintainer labels an issue kb-accepted. It reads
 the issue form, appends a field report (kb-feedback), a known error (kb-known-error) or an expert
-nomination (kb-source, to experts.yaml as status nominated, for a maintainer to score), and writes
-the branch name, PR title and PR body for the workflow to open a pull request.
+nomination (kb-source, to experts.yaml as status nominated, for a maintainer to score), or adds a
+weekly digest's ticked items (kb-digest) to the pages their sources name, and writes the branch
+name, PR title and PR body for the workflow to open a pull request.
 
     python3 scripts/kb/feedback.py --event "$GITHUB_EVENT_PATH"
     python3 scripts/kb/feedback.py --issue-json issue.json      # {"number", "title", "body", "labels"}
@@ -65,6 +66,8 @@ def kb_target(value: str, field: str, allow_url: bool = False) -> str:
     if allow_url and value.startswith("https://"):
         return value
     value = value.removeprefix("/").removeprefix("docs/knowledge/")
+    if ".." in Path(value).parts:
+        raise FeedbackError(f"'{field}' must stay under docs/knowledge/, got {value!r}")
     if not (KB_DIR / value.split("#")[0]).is_file():
         raise FeedbackError(f"'{field}' must be an existing path under docs/knowledge/"
                             + (" or an https:// link" if allow_url else "") + f", got {value!r}")
@@ -181,12 +184,75 @@ def add_nomination(issue: dict, fields: dict[str, str], today: str) -> tuple[str
             "freshness check will list them as waiting.")
 
 
+DIGEST_HEADING = re.compile(r"^### (.+?)(?: → `docs/knowledge/([^`]+)`)?\s*$")
+DIGEST_TICKED = re.compile(r"^- \[[xX]\] \[(.+?)\]\((https://[^\s)]+)\)(?: · (\d{4}-\d{2}-\d{2}))?(.*)$")
+DIGEST_PAGE_NOTE = re.compile(r"→ `?(?:docs/knowledge/)?([\w./-]+\.md)`?")
+DIGEST_SECTION = "## From the KB digest"
+
+
+def add_digest_items(issue: dict, today: str) -> tuple[str, str]:
+    """Add a digest's ticked items to the pages their sources name (or an item's own `→ page` note).
+
+    Items go under a "From the KB digest" section as links, for the reviewer to work into the page
+    as facts before merging (curation.md). Links the page already has are skipped.
+    """
+    by_page: dict[str, list[str]] = {}
+    page = None
+    unplaced = []
+    for line in (issue.get("body") or "").replace("\r\n", "\n").splitlines():
+        if m := DIGEST_HEADING.match(line):
+            page = m.group(2)
+            continue
+        if not (m := DIGEST_TICKED.match(line)):
+            continue
+        title, url, when, rest = m.groups()
+        target = page
+        if note := DIGEST_PAGE_NOTE.search(rest):
+            target = note.group(1)
+        if not target:
+            unplaced.append(url)
+            continue
+        target = kb_target(target, f"page for {url}")
+        title = " ".join(title.replace("[", "(").replace("]", ")").split())[:200]
+        by_page.setdefault(target, []).append(
+            f"- [{title}]({url})" + (f" ({when}, digest #{issue['number']})" if when else f" (digest #{issue['number']})"))
+    if unplaced:
+        raise FeedbackError("ticked item(s) with no page; add `→ docs/knowledge/<page>.md` after: "
+                            + ", ".join(unplaced))
+    if not by_page:
+        raise FeedbackError("no ticked (- [x]) items in the digest")
+    added = 0
+    for target, lines in by_page.items():
+        path = KB_DIR / target.split("#")[0]
+        text = path.read_text(encoding="utf-8")
+        new = [ln for ln in lines if ln.split("](", 1)[1].split(")", 1)[0] not in text]
+        if not new:
+            continue
+        if DIGEST_SECTION not in text:
+            text = text.rstrip("\n") + f"\n\n{DIGEST_SECTION}\n\n"
+        else:
+            text = text.rstrip("\n") + "\n"
+        path.write_text(text + "\n".join(new) + "\n", encoding="utf-8")
+        added += len(new)
+    if not added:
+        raise FeedbackError("every ticked item is already linked from its page")
+    pages = ", ".join(f"`docs/knowledge/{p}`" for p in by_page)
+    return (f"KB digest: {added} item(s) from #{issue['number']}",
+            f"Adds the {added} ticked item(s) from digest #{issue['number']} to {pages}, under "
+            f"\"{DIGEST_SECTION[3:]}\".\n\nBefore merging, work each link into the page as facts "
+            "(versions, fixes, behavior; not a link dump), update `last_reviewed` if you checked the "
+            "page's claims, and drop the link line once its facts are in.")
+
+
 def write(path: Path, data) -> None:
     path.write_text(kblib.yaml_header(path) + kblib.dump_yaml(data), encoding="utf-8")
 
 
 def handle(issue: dict, today: str) -> tuple[str, str]:
     labels = {lbl["name"] if isinstance(lbl, dict) else lbl for lbl in issue.get("labels", [])}
+    if "kb-digest" in labels:
+        # The curator wrote the digest; only https links and KB page paths are taken from it.
+        return add_digest_items(issue, today)
     fields = parse_form(issue.get("body") or "")
     public_safe(fields)
     if "kb-known-error" in labels:
@@ -195,7 +261,7 @@ def handle(issue: dict, today: str) -> tuple[str, str]:
         return add_nomination(issue, fields, today)
     if "kb-feedback" in labels:
         return add_field_report(issue, fields, today)
-    raise FeedbackError("the issue has none of the kb-feedback, kb-known-error or kb-source labels")
+    raise FeedbackError("the issue has none of the kb-feedback, kb-known-error, kb-source or kb-digest labels")
 
 
 def main() -> int:

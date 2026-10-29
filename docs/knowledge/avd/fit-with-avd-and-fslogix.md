@@ -3,7 +3,7 @@ title: "How Liquidware products fit with Azure Virtual Desktop and FSLogix"
 summary: "Which job each Liquidware product does next to AVD's own features and FSLogix: profiles, app delivery, support and assessment"
 topic: avd
 status: partial
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-29
 ---
 
 # How Liquidware products fit with Azure Virtual Desktop and FSLogix
@@ -37,5 +37,9 @@ knowledge base's topic ([family.yaml](../family.yaml)); link there for FSLogix b
 - Portability saves at logoff. Whether saves survive forced logoff, Lock, deallocation and host
   failure, and in what order against the FSLogix detach, is *unverified*; until then Portability
   carries only settings that can be lost without harm.
-- FlexApp app attach on Entra-joined hosts without storage keys is *unverified*.
+- FlexApp app attach on Entra-joined hosts without storage keys is *unverified*. Microsoft's
+  documented setup for Azure Files with Entra-joined session hosts grants the Azure Virtual Desktop
+  service principals **Reader and Data Access**, which lets them use the account's access keys
+  ([app attach file share](https://learn.microsoft.com/azure/virtual-desktop/app-attach-overview#file-share));
+  a keyless configuration isn't documented.
 - ProfileDisk on Entra-only Azure Files is *unverified*.

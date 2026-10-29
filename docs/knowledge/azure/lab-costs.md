@@ -2,8 +2,10 @@
 title: "Lab costs and teardown"
 summary: "What keeps billing while a Stratusphere lab is stopped, and why a lab run ends torn down"
 topic: azure
-status: partial
-last_reviewed: 2026-10-21
+status: verified
+last_reviewed: 2026-10-29
+sources:
+  - https://azure.microsoft.com/pricing/details/azure-nat-gateway/
 ---
 
 # Lab costs and teardown
@@ -12,7 +14,9 @@ A lab run ends with the environment torn down, or with everything deallocated th
 the VMs isn't enough on its own.
 
 - **Deallocate, don't just stop.** A VM stopped from inside the guest keeps its compute reserved and
-  billed. Stop it from Azure so it's deallocated.
+  billed. Stop it from Azure so it's deallocated
+  ([states and billing](https://learn.microsoft.com/azure/virtual-machines/states-billing#power-states-and-billing)).
+  Disks and networking keep billing either way.
 - **Some resources bill while the VMs are off.** A NAT Gateway, Azure Bastion Basic or higher,
   public IPs and managed disks keep billing whatever the VMs do. Bastion Developer is the exception:
   no hourly or outbound data charge, but one connection at a time and only to VMs in its own VNet

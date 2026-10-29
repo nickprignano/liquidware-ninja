@@ -6,11 +6,13 @@ already links to, and writes a Markdown digest. No LLM involved; a person (or a 
 routine) decides what goes into the KB.
 
     python3 scripts/kb/curate.py --since-days 8 --output digest.md
+    python3 scripts/kb/curate.py --superseded open-digests.json --new-issue 42
 """
 
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import re
 import sys
@@ -80,12 +82,32 @@ def render(results, errors, since: datetime) -> str:
     return "\n".join(lines) + "\n"
 
 
+TICKED = re.compile(r"^- \[[xX]\] ", re.M)
+
+
+def superseded(open_digests: list[dict], new_number: int) -> list[int]:
+    """Older open digest issues nobody ticked anything in; the new digest replaces them."""
+    return sorted(d["number"] for d in open_digests
+                  if d["number"] < new_number and not TICKED.search(d.get("body") or ""))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--superseded", type=Path, metavar="OPEN_DIGESTS_JSON",
+                        help="print the open digests (gh issue list --json number,body) that "
+                             "--new-issue replaces, one per line, and exit")
+    parser.add_argument("--new-issue", type=int)
     parser.add_argument("--sources", type=Path, default=KB_DIR / "sources.toml")
     parser.add_argument("--since-days", type=int, default=8)
     parser.add_argument("--output", type=Path, help="write the digest here (default: stdout)")
     args = parser.parse_args()
+
+    if args.superseded:
+        if not args.new_issue:
+            parser.error("--superseded needs --new-issue")
+        digests = json.loads(args.superseded.read_text(encoding="utf-8"))
+        print("\n".join(str(n) for n in superseded(digests, args.new_issue)))
+        return 0
 
     sources = tomllib.loads(args.sources.read_text(encoding="utf-8"))["source"]
     since = datetime.now(timezone.utc) - timedelta(days=args.since_days)

@@ -82,3 +82,11 @@ jobs:
           else
             gh issue create --label kb-freshness --title "KB freshness check" --body-file freshness.md
           fi
+      - name: Close the freshness issue when nothing is left
+        if: steps.collect.outputs.items == '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          for n in $(gh issue list --label kb-freshness --state open --json number --jq '.[].number'); do
+            gh issue close "$n" --reason completed --comment "Freshness check on $(date -u +%F) found nothing to review."
+          done
