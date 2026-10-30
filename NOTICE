@@ -24,8 +24,8 @@ in the guardrails, curation and experts pages for this project.
 Third-party components
 ----------------------
 
-This repository does not include, vendor or redistribute any third-party code or binaries.
-
+- `site/assets/` vendors a pinned copy of the `avd-ops` design system (`ds-v2.7.0`, https://github.com/avd-ops/avd-ops, MIT license) along with its self-hosted web fonts (IBM Plex Mono, JetBrains Mono, Schibsted Grotesk, and Source Serif 4 under the SIL Open Font License 1.1; see `site/assets/fonts/LICENSE`).
+- The site build script (`scripts/site/build-site.mjs`) uses `marked` (MIT license) as a devDependency.
 - Liquidware Stratusphere UX, ProfileUnity, FlexApp and CommandCTRL are products of Liquidware Labs, Inc.
 - The workflows run Gitleaks (MIT license) from its published container image.
 

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>flexapp-factory (Private Overview) | liquidware-ninja</title>
+<meta name="description" content="High-level architectural overview of flexapp-factory: the application server evaluator, dependency DAG builder, and unattended Liquidware FlexApp packaging factory.">
+<!-- shell:head -->
+<link rel="icon" href="../assets/brand/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/avd-ops.css">
+<link rel="stylesheet" href="../assets/avd-ops-shell.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script src="../assets/theme.js"></script>
+<!-- /shell:head -->
+</head>
+<body class="shell">
+<!-- shell:top -->
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar"><div class="bar-in"><a class="brand" href="../index.html"><img class="mark" src="../assets/brand/mark.svg" alt="" width="44" height="44"><span class="name"><span class="word">liquidware-ninja</span><span class="tag">Second brain &amp; toolkit</span></span></a>
+<nav class="switcher" aria-label="Site sections"><a href="../index.html" aria-current="true">Liquidware</a><a href="../docs/index.html">KB</a><a href="../blog/index.html">Blog</a><a href="https://avd-ops.dev/">avd-ops.dev</a></nav>
+<details class="notice"><summary><strong class="long">Personal project. Research and learning only. Not for production. No warranty.</strong><strong class="short">Not for production</strong></summary>
+<div class="full"><ul><li>Built on my own time for research and learning. Not affiliated with, endorsed by or supported by my employer, Liquidware or Microsoft.</li>
+<li>Bring your own Liquidware licenses. Don't run any of it in production or against tenants and subscriptions that matter. Test in a dedicated lab first.</li>
+<li>Provided "as is", without warranty of any kind, under each repository's license. You use it at your own risk and own the Azure charges it incurs.</li>
+<li><strong>Contributions and forks are welcome and encouraged on public repos.</strong> See <a href="../index.html#contribute">Contribute</a>.</li></ul></div></details>
+<div class="tools"><button class="iconbtn theme" type="button" aria-label="Switch theme"><svg class="sun" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.5"/><path d="M10 1.8v2.2M10 16v2.2M1.8 10H4M16 10h2.2M4.2 4.2l1.6 1.6M14.2 14.2l1.6 1.6M4.2 15.8l1.6-1.6M14.2 5.8l1.6-1.6"/></svg><svg class="moon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 12.4A7 7 0 0 1 7.6 3.5a7 7 0 1 0 8.9 8.9Z"/></svg></button><button class="iconbtn menu" type="button" aria-label="Pages" aria-expanded="false" aria-controls="side"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 5.5h14M3 10h14M3 14.5h14"/></svg></button></div></div></header>
+<div class="layout"><nav class="side" id="side" aria-label="Pages">
+<p class="group">Start</p><a href="../index.html">Overview</a><a href="../architecture.html">Architecture</a><a href="../toolkit.html">PowerShell toolkit</a><a href="../blog/index.html">Field notes (Blog)</a><a href="../docs/index.html">Knowledge base</a>
+<p class="group">Liquidware Repos</p><a href="../repos/liquidware-ninja.html">liquidware-ninja</a><a href="../repos/avd-liquidware.html">avd-liquidware</a><a href="../repos/ux-assess.html">ux-assess (private)</a><a href="../repos/flexapp-factory.html" aria-current="page">flexapp-factory (private)</a><a href="../index.html#avd-ops">avd-ops family</a>
+<p class="group">Knowledge Base</p><a href="../docs/liquidware/products.html">Products & docs</a><a href="../docs/platforms/multi-platform-matrix.html">Multi-platform matrix</a><a href="../docs/avd/fit-with-avd-and-fslogix.html">Fit with AVD & FSLogix</a><a href="../docs/stratusphere/api.html">Stratusphere API</a><a href="../docs/stratusphere/spotcheck-and-sizing.html">SpotCheck & sizing</a><a href="../docs/profileunity/architecture-and-portability.html">ProfileUnity & Portability</a><a href="../docs/flexapp/packaging-and-delivery.html">FlexApp & App Attach</a><a href="../docs/commandctrl/overview.html">CommandCTRL</a><a href="../docs/deployment/gotchas.html">Deployment gotchas</a><a href="../docs/troubleshooting/index.html">Known errors</a><a href="../docs/decisions/index.html">Decisions</a><a href="../docs/graph.html">Graph</a>
+</nav>
+<!-- /shell:top -->
+<main id="main">
+<div class="col">
+<h1>flexapp-factory</h1>
+<p class="lede">High-level overview of the private <strong>Liquidware FlexApp</strong> packaging factory and application server evaluator (feature <code>F24</code>): inspects existing Windows application servers, joins Stratusphere UX / <code>ux-assess</code> telemetry to retire unused software, builds multi-step dependency DAGs, resolves installer media, and drives unattended FlexApp captures and headless smoke tests.</p>
+<div class="chips"><span class="badge b-private">Private Companion Repo</span><span class="chip">Python 3.10+</span><span class="chip">PowerShell 7</span><span class="chip">FlexApp Packaging Automation (FPA)</span><span class="chip">AVD App Attach</span></div>
+
+<h2 id="two-jobs">Two Connected Jobs</h2>
+<div class="repo-grid">
+<article class="repo-card tier-card">
+<div class="repo-head">
+<h3>1. Evaluate Existing Application Servers</h3>
+<span class="badge b-private">Discovery &amp; DAG</span>
+</div>
+<p class="repo-role">Export-ServerAppInventory.ps1 + flexapp-factory evaluate</p>
+<ul>
+<li><strong>Deep Endpoint &amp; RDSH Inspection:</strong> Collects Windows Registry Uninstall keys (<code>x64</code> and <code>WOW6432Node</code>), MSI Installer tables, App-V/MSIX packages, Windows Services, Kernel Drivers (<code>.sys</code>), Scheduled Tasks, COM classes, ODBC DSNs, installed runtimes (VC++, .NET, Java, WebView2), and cached MSIs.</li>
+<li><strong>Telemetry-Driven Retirement:</strong> Joins Stratusphere UX / <code>ux-assess</code> application usage data to separate active applications from unused software (<code>retire</code>).</li>
+<li><strong>3-Tier Classification &amp; Dependency DAG:</strong> Classifies every app into <code>blocked-or-base-image</code> (drivers, system services, or &gt;80% user share), <code>shared-runtime</code>, or <code>layerable</code> / <code>composite-layer</code> (grouping app-specific runtimes, ODBC DSNs, and Office add-ins into multi-step composite recipes).</li>
+<li><strong>4-Step Installer Sourcing Cascade:</strong> Resolves silent installers in strict priority order:
+  <ol>
+    <li>Customer media share</li>
+    <li>Curated <code>recipes/catalog.json</code> + Winget / Evergreen</li>
+    <li>Server <code>InstallSource</code> or full-CAB cached MSI</li>
+    <li>Actionable <em>Missing Media Checklist</em> deliverable</li>
+  </ol>
+</li>
+</ul>
+</article>
+
+<article class="repo-card tier-card">
+<div class="repo-head">
+<h3>2. Convert &amp; Run Unattended Captures</h3>
+<span class="badge b-private">Unattended Build</span>
+</div>
+<p class="repo-role">ConvertTo-FlexAppSource.ps1 + compile-queue + Invoke-FlexAppFactory.ps1</p>
+<ul>
+<li><strong>Multi-Format Package Ingestion:</strong> Converts existing <code>.appv</code>, <code>.msix</code>/<code>.msixbundle</code>, <code>.intunewin</code>, SCCM / PSAppDeployToolkit (<code>Deploy-Application.ps1</code>), and <code>.msi</code>/<code>.exe</code> bundles into normalized capture inputs.</li>
+<li><strong>Deterministic Offline Build Queue:</strong> Compiles and validates <code>build-queue.json</code> offline (zero cloud spend in <code>Plan</code> mode) before provisioning or touching any packaging VM.</li>
+<li><strong>Dual Execution Planes:</strong> Drives either <strong>Single-VM CLI</strong> (<code>fpa-packager.exe</code> + <code>bundler.exe</code> on an ephemeral packaging VM) or the <strong>Batch FPA Control Plane</strong> (<code>Primary-Service.exe</code> REST API on port <code>9075</code> / <code>primary-client.exe</code>).</li>
+<li><strong>Headless Smoke Testing &amp; Manifest Handoff:</strong> Runs post-capture verification (<code>Test-FlexAppPackage.ps1</code>) and emits validated <code>liquidware-ninja-flexapp-package/v1</code> manifests ready for <code>avd-liquidware</code> to register as AVD App Attach packages.</li>
+</ul>
+</article>
+</div>
+
+<h2 id="public-docs">Public Reference Material in liquidware-ninja</h2>
+<p>While the <code>flexapp-factory</code> automation engine remains private, the candidate scoring rules (<code>Test-LwFlexAppCandidate</code>), manifest builder (<code>New-LwFlexAppManifest</code>), conflict detector (<code>Get-LwAssignmentConflict</code>), and packaging patterns are open-source in <code>liquidware-ninja</code>:</p>
+<p class="actions">
+<a class="cta" href="../docs/flexapp/packaging-and-delivery.html">FlexApp Packaging &amp; Delivery KB</a>
+<a class="cta ghost" href="../toolkit.html#functions">PowerShell Candidate &amp; Manifest Functions</a>
+<a class="cta ghost" href="../blog/2026-10-28-entra-only-profileunity-flexapp-on-avd.html">Field Note: Operator-Registered App Attach</a>
+</p>
+</div>
+</main>
+<!-- shell:foot -->
+</div>
+<footer class="foot"><div class="in"><p>Published from <a href="https://github.com/nickprignano/liquidware-ninja">nickprignano/liquidware-ninja</a>. Something wrong? Open an issue or a pull request in the repository it came from.</p>
+<p>Public repositories are open source under the MIT License (with 2ndbrain knowledge base tooling under Apache-2.0); private companion repositories reserve all rights. Liquidware, Stratusphere, ProfileUnity, FlexApp, Connector ID and CommandCTRL are trademarks of Liquidware Labs, Inc.; Azure, Azure Virtual Desktop, Windows 365, Microsoft Entra, Intune and FSLogix are trademarks of Microsoft.</p>
+<p class="credit">A <a href="https://prignano.ai/">prignano.ai</a> production · Part of <a href="https://avd-ops.dev/">avd-ops</a></p></div></footer>
+<button class="backdrop" type="button" tabindex="-1" aria-label="Close the pages list"></button>
+<!-- /shell:foot -->
+</body>
+</html>

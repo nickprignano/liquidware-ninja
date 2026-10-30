@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>liquidware-ninja | Liquidware Second Brain, Toolkit &amp; Ecosystem</title>
+<meta name="description" content="The Liquidware second brain, knowledge base, PowerShell toolkit, and ecosystem reference for Stratusphere UX, ProfileUnity, FlexApp, and CommandCTRL across Azure Virtual Desktop and enterprise desktops.">
+<!-- shell:head -->
+<link rel="icon" href="assets/brand/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/avd-ops.css">
+<link rel="stylesheet" href="assets/avd-ops-shell.css">
+<link rel="stylesheet" href="assets/site.css">
+<script src="assets/theme.js"></script>
+<!-- /shell:head -->
+</head>
+<body class="shell">
+<!-- shell:top -->
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar"><div class="bar-in"><a class="brand" href="index.html"><img class="mark" src="assets/brand/mark.svg" alt="" width="44" height="44"><span class="name"><span class="word">liquidware-ninja</span><span class="tag">Second brain &amp; toolkit</span></span></a>
+<nav class="switcher" aria-label="Site sections"><a href="index.html" aria-current="true">Liquidware</a><a href="docs/index.html">KB</a><a href="blog/index.html">Blog</a><a href="https://avd-ops.dev/">avd-ops.dev</a></nav>
+<details class="notice"><summary><strong class="long">Personal project. Research and learning only. Not for production. No warranty.</strong><strong class="short">Not for production</strong></summary>
+<div class="full"><ul><li>Built on my own time for research and learning. Not affiliated with, endorsed by or supported by my employer, Liquidware or Microsoft.</li>
+<li>Bring your own Liquidware licenses. Don't run any of it in production or against tenants and subscriptions that matter. Test in a dedicated lab first.</li>
+<li>Provided "as is", without warranty of any kind, under each repository's license. You use it at your own risk and own the Azure charges it incurs.</li>
+<li><strong>Contributions and forks are welcome and encouraged on public repos.</strong> See <a href="index.html#contribute">Contribute</a>.</li></ul></div></details>
+<div class="tools"><button class="iconbtn theme" type="button" aria-label="Switch theme"><svg class="sun" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.5"/><path d="M10 1.8v2.2M10 16v2.2M1.8 10H4M16 10h2.2M4.2 4.2l1.6 1.6M14.2 14.2l1.6 1.6M4.2 15.8l1.6-1.6M14.2 5.8l1.6-1.6"/></svg><svg class="moon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 12.4A7 7 0 0 1 7.6 3.5a7 7 0 1 0 8.9 8.9Z"/></svg></button><button class="iconbtn menu" type="button" aria-label="Pages" aria-expanded="false" aria-controls="side"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 5.5h14M3 10h14M3 14.5h14"/></svg></button></div></div></header>
+<div class="layout"><nav class="side" id="side" aria-label="Pages">
+<p class="group">Start</p><a href="index.html" aria-current="page">Overview</a><a href="architecture.html">Architecture</a><a href="toolkit.html">PowerShell toolkit</a><a href="blog/index.html">Field notes (Blog)</a><a href="docs/index.html">Knowledge base</a>
+<p class="group">Liquidware Repos</p><a href="repos/liquidware-ninja.html">liquidware-ninja</a><a href="repos/avd-liquidware.html">avd-liquidware</a><a href="repos/ux-assess.html">ux-assess (private)</a><a href="repos/flexapp-factory.html">flexapp-factory (private)</a><a href="index.html#avd-ops">avd-ops family</a>
+<p class="group">Knowledge Base</p><a href="docs/liquidware/products.html">Products & docs</a><a href="docs/platforms/multi-platform-matrix.html">Multi-platform matrix</a><a href="docs/avd/fit-with-avd-and-fslogix.html">Fit with AVD & FSLogix</a><a href="docs/stratusphere/api.html">Stratusphere API</a><a href="docs/stratusphere/spotcheck-and-sizing.html">SpotCheck & sizing</a><a href="docs/profileunity/architecture-and-portability.html">ProfileUnity & Portability</a><a href="docs/flexapp/packaging-and-delivery.html">FlexApp & App Attach</a><a href="docs/commandctrl/overview.html">CommandCTRL</a><a href="docs/deployment/gotchas.html">Deployment gotchas</a><a href="docs/troubleshooting/index.html">Known errors</a><a href="docs/decisions/index.html">Decisions</a><a href="docs/graph.html">Graph</a>
+</nav>
+<!-- /shell:top -->
+<main id="main" class="home">
+<section class="hero" aria-labelledby="h-hero">
+<p class="eyebrow">liquidware-ninja.prignano.ai · Part of the avd-ops ecosystem</p>
+<h1 id="h-hero">Liquidware across virtual and physical desktops, as code and a living second brain.</h1>
+<p class="lede">Architecture reference, 2ndbrain knowledge base, cross-platform PowerShell utilities, and automation projects for <strong>Stratusphere UX</strong>, <strong>ProfileUnity</strong>, <strong>FlexApp</strong>, and <strong>CommandCTRL</strong> across Azure Virtual Desktop, Windows 365, Citrix, Omnissa Horizon, RDS, and physical PCs.</p>
+<div class="actions">
+<a class="cta" href="docs/index.html">Explore Knowledge Base</a>
+<a class="cta ghost" href="blog/index.html">Read Field Notes</a>
+<a class="cta ghost" href="toolkit.html">PowerShell Toolkit</a>
+<a class="cta ghost" href="https://github.com/nickprignano/liquidware-ninja">GitHub Repo</a>
+</div>
+</section>
+
+<figure class="map" aria-labelledby="map-cap">
+<div class="band"><span class="eyebrow">Public Foundation &amp; Azure Deployment</span>
+<div class="lw-row">
+<a class="tile" href="repos/liquidware-ninja.html"><small>The why, reference &amp; toolkit (Public)</small><b>liquidware-ninja</b><span>Living 2ndbrain knowledge base across all four Liquidware products, technical field notes, reference templates, and nine pure PowerShell functions.</span><span class="status s-built">Public · MIT / Apache-2.0</span></a>
+<a class="tile" href="repos/avd-liquidware.html"><small>The Azure / AVD deployment tier (Public)</small><b>avd-liquidware</b><span>Subscription-scoped Bicep and PowerShell to deploy Stratusphere UX appliances, Connector ID Key rollouts, ProfileUnity consoles, and FlexApp App Attach on AVD.</span><span class="status s-built">Public · MIT</span></a>
+</div></div>
+<p class="needs">Shared schemas, SpotCheck thresholds, and manifest contracts connect the public reference tier to the private assessment and packaging pipelines.</p>
+<div class="tier-band"><span class="eyebrow">Private Companion Engines (High-Level Architecture Overview)</span>
+<div class="lw-row">
+<a class="tile" href="repos/ux-assess.html"><small>Assessment &amp; deliverable pipeline (Private)</small><b>ux-assess</b><span>Platform-agnostic Stratusphere UX Hub API exporter, canonical dataset normalizer, HMAC-SHA256 pseudonymizer, SpotCheck analyzer, and multi-format report + Power BI PBIP generator.</span><span class="status s-slice">Private repo · High-level overview</span></a>
+<a class="tile" href="repos/flexapp-factory.html"><small>Application evaluator &amp; packaging factory (Private)</small><b>flexapp-factory</b><span>Evaluates existing application servers, builds dependency DAGs, converts legacy packages (.appv, .msix, .intunewin, PSADT), and drives unattended FlexApp captures and smoke tests.</span><span class="status s-slice">Private repo · High-level overview</span></a>
+</div></div>
+<figcaption id="map-cap">Each repository owns one clear job and exchanges validated, redacted JSON/Parquet contracts. <a href="architecture.html">See how the four Liquidware repositories and avd-ops fit together</a>.</figcaption>
+</figure>
+
+<div class="col">
+<h2 id="liquidware-repos">The Liquidware Repositories</h2>
+<p>Our Liquidware engineering work is split into four focused repositories—two open-source repositories on GitHub and two private companion engines documented here at a high level.</p>
+
+<div class="repo-grid">
+<article class="repo-card accent-card">
+<div class="repo-head">
+<h3><a href="repos/liquidware-ninja.html">liquidware-ninja</a></h3>
+<span class="badge b-public">Public · MIT</span>
+</div>
+<p class="repo-role">Second Brain, Templates &amp; PowerShell Toolkit</p>
+<p>The authoritative knowledge base and general catchall repository across Stratusphere UX, ProfileUnity, FlexApp, and CommandCTRL.</p>
+<ul>
+<li><strong>2ndbrain Knowledge Base (<code>docs/knowledge/</code>):</strong> 21 curated topic pages, MADR decision records, known errors, and weekly upstream digests.</li>
+<li><strong>Reference Templates (<code>templates/</code>):</strong> FSLogix Portability coexistence guardrails, FlexApp package manifests, Stratusphere Inspector catalogs, and CommandCTRL multi-session baselines.</li>
+<li><strong>PowerShell Toolkit (<code>scripts/tools/</code>):</strong> <code>LiquidwareNinja.psm1</code> (9 offline-testable functions) and <code>Test-LwCidKeyHealth.ps1</code> (PS 5.1/7+ endpoint agent health check).</li>
+</ul>
+<div class="repo-foot">
+<div class="chips"><span class="chip">2ndbrain KB</span><span class="chip">PowerShell</span><span class="chip">Templates</span></div>
+<a href="repos/liquidware-ninja.html">Repo overview &rarr;</a>
+</div>
+</article>
+
+<article class="repo-card accent-card">
+<div class="repo-head">
+<h3><a href="repos/avd-liquidware.html">avd-liquidware</a></h3>
+<span class="badge b-public">Public · MIT</span>
+</div>
+<p class="repo-role">Azure &amp; AVD Deployment Tier</p>
+<p>Automates deploying and operating the optional Liquidware tier in Azure against an existing <a href="https://github.com/avd-ops/avd-landing-zone">avd-landing-zone</a> estate while keeping FSLogix as the primary profile container.</p>
+<ul>
+<li><strong>Stratusphere UX in Azure (<code>stratusphere/</code>):</strong> Preflight checks, Marketplace Hub/Database/Collector appliance deployment, Connector ID Key rollout via Run Command, and safe teardown.</li>
+<li><strong>ProfileUnity &amp; FlexApp Tier (<code>profileunity/</code>):</strong> Spoke VNet peering, Private DNS links, Key Vault, <code>lwconfig</code> / <code>portability</code> / <code>appattach</code> Premium Azure Files shares with Entra Kerberos (no storage keys), and Console VM.</li>
+<li><strong>Two-Step Promotion:</strong> Managed Identity blob staging to on-demand ACI file-share promotion and operator-registered AVD App Attach.</li>
+</ul>
+<div class="repo-foot">
+<div class="chips"><span class="chip">Bicep</span><span class="chip">PowerShell</span><span class="chip">AVD</span></div>
+<a href="repos/avd-liquidware.html">Repo overview &rarr;</a>
+</div>
+</article>
+
+<article class="repo-card tier-card">
+<div class="repo-head">
+<h3><a href="repos/ux-assess.html">ux-assess</a></h3>
+<span class="badge b-private">Private Repo</span>
+</div>
+<p class="repo-role">Stratusphere UX Assessment &amp; Deliverable Pipeline</p>
+<p>Automates the end-to-end data engineering and reporting work of a Stratusphere UX engagement across physical PCs, Citrix, Omnissa Horizon, RDS, AVD, and Windows 365.</p>
+<ul>
+<li><strong>Collection &amp; Health:</strong> Pulls business-hour sliced data from <code>/lwl/api</code> (or Inspector exports) and verifies active collection coverage against expected inventory.</li>
+<li><strong>Normalization &amp; Privacy:</strong> Maps Hub columns into five canonical tables and applies deterministic keyed HMAC-SHA256 pseudonymization so before/after migration baselines align without exposing PII.</li>
+<li><strong>Multi-Format Deliverables:</strong> Scores platform-aware SpotCheck thresholds, classifies apps for Base Image vs. FlexApp, and renders <code>.xlsx</code>, <code>.pdf</code>, <code>.pptx</code>, and a Git-backed Power BI Project (<code>.pbip</code> TMDL/PBIR).</li>
+</ul>
+<div class="repo-foot">
+<div class="chips"><span class="chip">Python</span><span class="chip">PowerShell</span><span class="chip">Power BI PBIP</span></div>
+<a href="repos/ux-assess.html">High-level overview &rarr;</a>
+</div>
+</article>
+
+<article class="repo-card tier-card">
+<div class="repo-head">
+<h3><a href="repos/flexapp-factory.html">flexapp-factory</a></h3>
+<span class="badge b-private">Private Repo</span>
+</div>
+<p class="repo-role">Application Server Evaluator &amp; Unattended Packaging Factory</p>
+<p>Inspects legacy application servers, joins usage telemetry, and orchestrates deterministic, unattended Liquidware FlexApp packaging and validation pipelines.</p>
+<ul>
+<li><strong>Server Evaluation &amp; Dependency DAG:</strong> Inspects registry uninstall keys, MSI tables, services, kernel drivers (<code>.sys</code>), COM classes, and ODBC DSNs; joins <code>ux-assess</code> usage data; classifies apps into 3 tiers and groups composite recipes.</li>
+<li><strong>4-Step Installer Sourcing Cascade:</strong> Resolves media across customer shares, curated recipes + Winget/Evergreen, full-CAB cached MSIs, or emits a Missing Media Checklist.</li>
+<li><strong>Unattended Capture &amp; Smoke Testing:</strong> Converts <code>.appv</code>, <code>.msix</code>, <code>.intunewin</code>, and PSADT bundles into a deterministic <code>build-queue.json</code>, drives Single-VM CLI or Batch FPA REST APIs, and emits validated <code>liquidware-ninja-flexapp-package/v1</code> manifests.</li>
+</ul>
+<div class="repo-foot">
+<div class="chips"><span class="chip">Python</span><span class="chip">PowerShell</span><span class="chip">FlexApp FPA</span></div>
+<a href="repos/flexapp-factory.html">High-level overview &rarr;</a>
+</div>
+</article>
+</div>
+
+<h2 id="products">Four Products, Six Desktop Platforms</h2>
+<p>The knowledge base and toolkit cover all four Liquidware products across physical Windows PCs, Citrix CVAD/DaaS, Omnissa Horizon, Windows Server RDS, Azure Virtual Desktop, and Windows 365:</p>
+<div class="tbl" tabindex="0" role="region" aria-label="Liquidware product coverage">
+<table class="stacked">
+<thead><tr><th>Product</th><th>Role in the Estate</th><th>Key Guardrail in This Toolkit</th><th>Knowledge Base</th></tr></thead>
+<tbody>
+<tr><td data-label="Product"><strong>Stratusphere UX</strong></td><td data-label="Role in the Estate">Historical UX telemetry, SpotCheck diagnostics, right-sizing, and before/after migration baselining</td><td data-label="Key Guardrail in This Toolkit">Always slice by active business hours (<code>08:00–18:00</code>) and evaluate <code>p95</code> alongside means; pseudonymize before export</td><td data-label="Knowledge Base"><a href="docs/stratusphere/api.html">API</a> · <a href="docs/stratusphere/spotcheck-and-sizing.html">SpotCheck</a> · <a href="docs/stratusphere/connector-id-key.html">CID Key</a></td></tr>
+<tr><td data-label="Product"><strong>ProfileUnity</strong></td><td data-label="Role in the Estate">User environment management (UEM), contextual policy, privilege elevation, and cross-OS Profile Portability</td><td data-label="Key Guardrail in This Toolkit">FSLogix owns the primary VHDX container; Portability never captures FSLogix-owned paths (<code>Test-LwPortabilityOverlap</code>)</td><td data-label="Knowledge Base"><a href="docs/profileunity/architecture-and-portability.html">Architecture &amp; Portability</a> · <a href="docs/avd/fit-with-avd-and-fslogix.html">AVD &amp; FSLogix</a></td></tr>
+<tr><td data-label="Product"><strong>FlexApp</strong></td><td data-label="Role in the Estate">Elastic VHDX/CimFS application layering delivered natively, via AVD App Attach, or offline via FlexApp One</td><td data-label="Key Guardrail in This Toolkit">Enforce the Single Assignment System Rule (<code>Get-LwAssignmentConflict</code>)—never assign an app in both App Attach and ProfileUnity</td><td data-label="Knowledge Base"><a href="docs/flexapp/packaging-and-delivery.html">Packaging &amp; Delivery</a></td></tr>
+<tr><td data-label="Product"><strong>CommandCTRL</strong></td><td data-label="Role in the Estate">SaaS real-time helpdesk diagnostics, live process/protocol triage, and remote remediation</td><td data-label="Key Guardrail in This Toolkit">Require user consent, disable history where Stratusphere collects, and restrict remote shell on multi-session hosts (<code>Test-LwCommandCtrlBaseline</code>)</td><td data-label="Knowledge Base"><a href="docs/commandctrl/overview.html">CommandCTRL Overview</a></td></tr>
+</tbody>
+</table>
+</div>
+
+<h2 id="avd-ops">The Broader avd-ops &amp; EUC Ecosystem</h2>
+<p>The Liquidware repositories plug into <a href="https://avd-ops.dev/"><strong>avd-ops</strong></a>, the open toolkit for Azure Virtual Desktop. Each repository in the family stays self-contained and communicates through versioned, redacted contracts:</p>
+
+<div class="family-grid">
+<a class="family-tile" href="https://avd-ops.dev/"><small>Front door · avd-ops.dev</small><b>avd-ops</b><span>The overview, onboarding docs, standards library, and shared design system for the AVD family.</span></a>
+<a class="family-tile" href="https://github.com/avd-ops/avd-landing-zone"><small>Foundation · How we build it</small><b>avd-landing-zone</b><span>Entra ID-joined, Intune-managed, private-by-default AVD landing zone in Bicep + browser deployment portal.</span></a>
+<a class="family-tile" href="https://github.com/avd-ops/avd-current-state"><small>Foundation · What it is</small><b>avd-current-state</b><span>Read-only offline PowerShell collector and validator for live Azure Virtual Desktop estates.</span></a>
+<a class="family-tile" href="https://github.com/avd-ops/avd-assess"><small>Foundation · What it should be</small><b>avd-assess</b><span>Assessment methodology, standards library, and target-state design contracts linked to published sources.</span></a>
+<a class="family-tile" href="https://github.com/avd-ops/avd-second-brain"><small>On top · Lifecycle memory</small><b>avd-second-brain</b><span>Family knowledge base, contract schemas (C9–C21), and reasoning across an estate's lifecycle.</span></a>
+<a class="family-tile" href="https://github.com/avd-ops/avd-swarm"><small>On top · Approved automation</small><b>avd-swarm</b><span>Agents that read freely and execute changes only through human-approved plans with a kill switch.</span></a>
+<a class="family-tile" href="https://github.com/avd-ops/avd-entra"><small>Control plane · Identity</small><b>avd-entra</b><span>Entra ID identity, dynamic groups, Kerberos trust, and Conditional Access for AVD.</span></a>
+<a class="family-tile" href="https://github.com/avd-ops/avd-intune"><small>Control plane · Endpoints</small><b>avd-intune</b><span>Intune session-host enrollment, Settings Catalog baselines, and Win32 app delivery.</span></a>
+<a class="family-tile" href="https://github.com/avd-ops/avd-m365"><small>Control plane · Productivity</small><b>avd-m365</b><span>Greenfield Microsoft 365 Apps, OneDrive Known Folder Move, and Teams VDI optimization.</span></a>
+<a class="family-tile" href="https://github.com/avd-ops/avd-azure"><small>Control plane · Infrastructure</small><b>avd-azure</b><span>Core Azure ARM and Bicep infrastructure patterns, networking, and storage.</span></a>
+<a class="family-tile" href="https://github.com/avd-ops/avd-power-platform"><small>Control plane · Workflows</small><b>avd-power-platform</b><span>Power Platform and Power Automate day-2 operational workflows for AVD.</span></a>
+<a class="family-tile" href="https://github.com/nickprignano/nerdio-hcl"><small>Sibling KB · Terraform &amp; Packer</small><b>nerdio-hcl</b><span>HashiCorp Terraform and Packer deployment kit for Nerdio Manager for Enterprise on AVD.</span></a>
+</div>
+
+<h2 id="try-it">Quick Start in Azure Cloud Shell</h2>
+<p>Clone <code>liquidware-ninja</code> in Azure Cloud Shell (or locally in PowerShell 7+) to run the offline guardrail functions or query the knowledge base:</p>
+<pre>if (-not (Test-Path ~/liquidware-ninja)) { git clone https://github.com/nickprignano/liquidware-ninja.git ~/liquidware-ninja }
+Set-Location ~/liquidware-ninja; git checkout -q main; git pull -q --ff-only
+Import-Module ./scripts/tools/LiquidwareNinja.psm1 -Force
+Get-LwSpotCheckThreshold
+Test-LwPortabilityOverlap -PortabilityPath @('%APPDATA%\Notepad++', '%LOCALAPPDATA%\Contoso\App') -EnabledModule @('Portability')</pre>
+
+<h2 id="contribute">Guardrails &amp; Contributing</h2>
+<ul class="principles">
+<li><strong>Zero Tenant or Customer Data</strong>Nothing in any public repo identifies a real tenant, subscription, employer, or customer. Examples use <code>contoso.com</code>, <code>10.60.x.x</code>, and all-zero GUIDs.</li>
+<li><strong>No Vendor Binaries or Licenses</strong>Bring your own Liquidware licenses and download appliances or installers from your own Hub or Azure Marketplace.</li>
+<li><strong>Evidence &amp; Guards First</strong>Every rule in the knowledge base traces to a primary source or lab run, and every PowerShell utility is backed by offline Pester tests.</li>
+<li><strong>Open Knowledge Base</strong>Contributions, forks, and field reports on the public repos are welcome under the MIT License.</li>
+</ul>
+<p class="actions">
+<a class="cta" href="https://github.com/nickprignano/liquidware-ninja">liquidware-ninja on GitHub</a>
+<a class="cta ghost" href="https://github.com/nickprignano/avd-liquidware">avd-liquidware on GitHub</a>
+<a class="cta ghost" href="docs/graph.html">View Knowledge Graph</a>
+<a class="cta ghost" href="llms.txt">llms.txt</a>
+</p>
+</div>
+</main>
+<!-- shell:foot -->
+</div>
+<footer class="foot"><div class="in"><p>Published from <a href="https://github.com/nickprignano/liquidware-ninja">nickprignano/liquidware-ninja</a>. Something wrong? Open an issue or a pull request in the repository it came from.</p>
+<p>Public repositories are open source under the MIT License (with 2ndbrain knowledge base tooling under Apache-2.0); private companion repositories reserve all rights. Liquidware, Stratusphere, ProfileUnity, FlexApp, Connector ID and CommandCTRL are trademarks of Liquidware Labs, Inc.; Azure, Azure Virtual Desktop, Windows 365, Microsoft Entra, Intune and FSLogix are trademarks of Microsoft.</p>
+<p class="credit">A <a href="https://prignano.ai/">prignano.ai</a> production · Part of <a href="https://avd-ops.dev/">avd-ops</a></p></div></footer>
+<button class="backdrop" type="button" tabindex="-1" aria-label="Close the pages list"></button>
+<!-- /shell:foot -->
+</body>
+</html>

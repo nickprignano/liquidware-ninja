@@ -1,0 +1,16 @@
+{
+  "name": "liquidware-ninja",
+  "private": true,
+  "description": "liquidware-ninja.prignano.ai: the Liquidware second brain, toolkit, and field notes. Personal project, not for production, as is.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build:site": "node scripts/site/build-site.mjs && node scripts/site/apply-shell.mjs",
+    "check:site": "node scripts/site/build-site.mjs --check && node scripts/site/apply-shell.mjs --check",
+    "test": "node --test \"tests/*.test.mjs\"",
+    "cf:deploy": "npm run build:site && npx wrangler deploy"
+  },
+  "devDependencies": {
+    "marked": "14.1.4"
+  }
+}

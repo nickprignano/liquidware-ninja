@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>PowerShell Toolkit &amp; Templates | liquidware-ninja</title>
+<meta name="description" content="Nine pure, offline-testable PowerShell functions in LiquidwareNinja.psm1, the Test-LwCidKeyHealth.ps1 endpoint diagnostic script, and reference JSON templates.">
+<!-- shell:head -->
+<link rel="icon" href="assets/brand/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/avd-ops.css">
+<link rel="stylesheet" href="assets/avd-ops-shell.css">
+<link rel="stylesheet" href="assets/site.css">
+<script src="assets/theme.js"></script>
+<!-- /shell:head -->
+</head>
+<body class="shell">
+<!-- shell:top -->
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar"><div class="bar-in"><a class="brand" href="index.html"><img class="mark" src="assets/brand/mark.svg" alt="" width="44" height="44"><span class="name"><span class="word">liquidware-ninja</span><span class="tag">Second brain &amp; toolkit</span></span></a>
+<nav class="switcher" aria-label="Site sections"><a href="index.html" aria-current="true">Liquidware</a><a href="docs/index.html">KB</a><a href="blog/index.html">Blog</a><a href="https://avd-ops.dev/">avd-ops.dev</a></nav>
+<details class="notice"><summary><strong class="long">Personal project. Research and learning only. Not for production. No warranty.</strong><strong class="short">Not for production</strong></summary>
+<div class="full"><ul><li>Built on my own time for research and learning. Not affiliated with, endorsed by or supported by my employer, Liquidware or Microsoft.</li>
+<li>Bring your own Liquidware licenses. Don't run any of it in production or against tenants and subscriptions that matter. Test in a dedicated lab first.</li>
+<li>Provided "as is", without warranty of any kind, under each repository's license. You use it at your own risk and own the Azure charges it incurs.</li>
+<li><strong>Contributions and forks are welcome and encouraged on public repos.</strong> See <a href="index.html#contribute">Contribute</a>.</li></ul></div></details>
+<div class="tools"><button class="iconbtn theme" type="button" aria-label="Switch theme"><svg class="sun" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.5"/><path d="M10 1.8v2.2M10 16v2.2M1.8 10H4M16 10h2.2M4.2 4.2l1.6 1.6M14.2 14.2l1.6 1.6M4.2 15.8l1.6-1.6M14.2 5.8l1.6-1.6"/></svg><svg class="moon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 12.4A7 7 0 0 1 7.6 3.5a7 7 0 1 0 8.9 8.9Z"/></svg></button><button class="iconbtn menu" type="button" aria-label="Pages" aria-expanded="false" aria-controls="side"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 5.5h14M3 10h14M3 14.5h14"/></svg></button></div></div></header>
+<div class="layout"><nav class="side" id="side" aria-label="Pages">
+<p class="group">Start</p><a href="index.html">Overview</a><a href="architecture.html">Architecture</a><a href="toolkit.html" aria-current="page">PowerShell toolkit</a><a href="blog/index.html">Field notes (Blog)</a><a href="docs/index.html">Knowledge base</a>
+<p class="group">Liquidware Repos</p><a href="repos/liquidware-ninja.html">liquidware-ninja</a><a href="repos/avd-liquidware.html">avd-liquidware</a><a href="repos/ux-assess.html">ux-assess (private)</a><a href="repos/flexapp-factory.html">flexapp-factory (private)</a><a href="index.html#avd-ops">avd-ops family</a>
+<p class="group">Knowledge Base</p><a href="docs/liquidware/products.html">Products & docs</a><a href="docs/platforms/multi-platform-matrix.html">Multi-platform matrix</a><a href="docs/avd/fit-with-avd-and-fslogix.html">Fit with AVD & FSLogix</a><a href="docs/stratusphere/api.html">Stratusphere API</a><a href="docs/stratusphere/spotcheck-and-sizing.html">SpotCheck & sizing</a><a href="docs/profileunity/architecture-and-portability.html">ProfileUnity & Portability</a><a href="docs/flexapp/packaging-and-delivery.html">FlexApp & App Attach</a><a href="docs/commandctrl/overview.html">CommandCTRL</a><a href="docs/deployment/gotchas.html">Deployment gotchas</a><a href="docs/troubleshooting/index.html">Known errors</a><a href="docs/decisions/index.html">Decisions</a><a href="docs/graph.html">Graph</a>
+</nav>
+<!-- /shell:top -->
+<main id="main">
+<div class="col">
+<h1>PowerShell Toolkit &amp; Reference Templates</h1>
+<p class="lede"><code>liquidware-ninja</code> ships a cross-platform PowerShell module (<a href="https://github.com/nickprignano/liquidware-ninja/blob/main/scripts/tools/LiquidwareNinja.psm1"><code>scripts/tools/LiquidwareNinja.psm1</code></a>), an endpoint diagnostic script for the Stratusphere Connector ID Key (<a href="https://github.com/nickprignano/liquidware-ninja/blob/main/scripts/tools/Test-LwCidKeyHealth.ps1"><code>Test-LwCidKeyHealth.ps1</code></a>), and five reference JSON templates (<a href="https://github.com/nickprignano/liquidware-ninja/tree/main/templates"><code>templates/</code></a>)—all tested offline with Pester 5.</p>
+<div class="chips"><span class="chip">PowerShell 7+</span><span class="chip">Windows PowerShell 5.1 (CID check)</span><span class="chip">Pester 5</span><span class="chip">Zero Cloud Spend</span></div>
+
+<h2 id="functions">Module Functions (<code>LiquidwareNinja.psm1</code>)</h2>
+<div class="tbl" tabindex="0" role="region" aria-label="LiquidwareNinja.psm1 exported functions">
+<table class="stacked">
+<thead><tr><th>Function</th><th>Product</th><th>What It Validates or Builds</th></tr></thead>
+<tbody>
+<tr><td data-label="Function"><code>Test-LwPortabilityOverlap</code></td><td data-label="Product">ProfileUnity + FSLogix</td><td data-label="What It Validates or Builds">Audits candidate Portability paths and enabled modules against <code>templates/profileunity/fslogix-portability-guardrails.json</code> to block FSLogix double-persistence and forbidden full-profile disk modules (<code>ProfileDisk</code>, <code>VhdProfile</code>).</td></tr>
+<tr><td data-label="Function"><code>Export-LwPortabilityRuleset</code></td><td data-label="Product">ProfileUnity + FSLogix</td><td data-label="What It Validates or Builds">Filters candidate Portability paths to strip any direct or child overlap with <code>fslogixOwnedPaths</code> and emits a clean <code>liquidware-ninja-portability-ruleset/v1</code> object.</td></tr>
+<tr><td data-label="Function"><code>Compare-LwProfileUnityConfig</code></td><td data-label="Product">ProfileUnity</td><td data-label="What It Validates or Builds">Diffs two ProfileUnity configuration exports (<code>sample-config-export.json</code> shape) and reports added/removed modules, Portability paths, application restrictions, and <code>iniSha256</code> digest changes before promotion.</td></tr>
+<tr><td data-label="Function"><code>Test-LwFlexAppCandidate</code></td><td data-label="Product">FlexApp + Stratusphere</td><td data-label="What It Validates or Builds">Scores an application for <code>BaseImage</code> (&gt;80% user share), <code>FlexAppAppAttach</code>, <code>FlexAppOne</code> (offline required), <code>VersionConsolidationFirst</code> (&gt;3 versions), or <code>NotRecommendedForLayering</code> (kernel drivers/boot services).</td></tr>
+<tr><td data-label="Function"><code>New-LwFlexAppManifest</code></td><td data-label="Product">FlexApp</td><td data-label="What It Validates or Builds">Builds and validates a <code>liquidware-ninja-flexapp-package/v1</code> metadata manifest, enforcing 64-char hex SHA-256 digests and the Single Assignment System Rule.</td></tr>
+<tr><td data-label="Function"><code>Get-LwAssignmentConflict</code></td><td data-label="Product">FlexApp + AVD</td><td data-label="What It Validates or Builds">Detects applications simultaneously assigned in more than one delivery plane (<code>AvdAppAttach</code>, <code>ProfileUnityFlexApp</code>, <code>NativeMsix</code>).</td></tr>
+<tr><td data-label="Function"><code>Get-LwSpotCheckThreshold</code></td><td data-label="Product">Stratusphere UX</td><td data-label="What It Validates or Builds">Returns canonical Liquidware SpotCheck thresholds and their sources from <code>templates/stratusphere/inspector-catalog.json</code>, optionally filtered by metric name.</td></tr>
+<tr><td data-label="Function"><code>ConvertTo-LwApiUrl</code></td><td data-label="Product">Stratusphere UX</td><td data-label="What It Validates or Builds">Constructs URL-encoded <code>https://&lt;hub&gt;/lwl/api?json=...</code> Inspector queries with explicit date ranges and business-hour slices (<code>StartTime</code> / <code>EndTime</code>).</td></tr>
+<tr><td data-label="Function"><code>Test-LwCommandCtrlBaseline</code></td><td data-label="Product">CommandCTRL</td><td data-label="What It Validates or Builds">Validates a CommandCTRL endpoint configuration against <code>templates/commandctrl/multisession-baseline.json</code> (user consent, privacy exclusions, sampling interval, and Stratusphere coexistence).</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2 id="cid-health">Endpoint Health Check (<code>Test-LwCidKeyHealth.ps1</code>)</h2>
+<p>Runs on both Windows PowerShell 5.1 and PowerShell 7+ to verify three things when a desktop or session host is missing from the Stratusphere Hub:</p>
+<ol>
+<li><strong>Installation directory &amp; certificate bootstrap:</strong> Checks <code>C:\Program Files (x86)\Liquidware Labs\Connector ID</code> and inspects <code>ca\public\mgrcert.pem</code> / <code>ca\cert.txt</code>.</li>
+<li><strong>Agent service state:</strong> Verifies that <code>tntgrd</code> or <code>LwL.ConnectorID</code> is installed and <code>Running</code>.</li>
+<li><strong>Hub callback reachability:</strong> Tests TCP 443 connectivity from the endpoint to the Hub or Collector address.</li>
+</ol>
+<pre>if (-not (Test-Path ~/liquidware-ninja)) { git clone https://github.com/nickprignano/liquidware-ninja.git ~/liquidware-ninja }
+Set-Location ~/liquidware-ninja; git checkout -q main; git pull -q --ff-only
+./scripts/tools/Test-LwCidKeyHealth.ps1 -HubAddress 10.60.0.4</pre>
+
+<h2 id="templates">Reference Templates (<code>templates/</code>)</h2>
+<div class="tbl" tabindex="0" role="region" aria-label="Reference JSON templates">
+<table class="stacked">
+<thead><tr><th>Template Path</th><th>Product</th><th>What It Defines</th></tr></thead>
+<tbody>
+<tr><td data-label="Template Path"><a href="https://github.com/nickprignano/liquidware-ninja/blob/main/templates/profileunity/fslogix-portability-guardrails.json"><code>profileunity/fslogix-portability-guardrails.json</code></a></td><td data-label="Product">ProfileUnity + FSLogix</td><td data-label="What It Defines">Canonical list of profile directories owned by FSLogix Profile/ODFC containers and forbidden full-profile modules.</td></tr>
+<tr><td data-label="Template Path"><a href="https://github.com/nickprignano/liquidware-ninja/blob/main/templates/profileunity/sample-config-export.json"><code>profileunity/sample-config-export.json</code></a></td><td data-label="Product">ProfileUnity</td><td data-label="What It Defines">Reference plain-text export shape (<code>enabledModules</code>, <code>portabilityPaths</code>, <code>applicationRestrictions</code>, <code>iniSha256</code>) for offline diffing.</td></tr>
+<tr><td data-label="Template Path"><a href="https://github.com/nickprignano/liquidware-ninja/blob/main/templates/flexapp/flexapp-package.example.json"><code>flexapp/flexapp-package.example.json</code></a></td><td data-label="Product">FlexApp</td><td data-label="What It Defines">Example <code>liquidware-ninja-flexapp-package/v1</code> metadata manifest for VHDX/CimFS packages and ring promotion.</td></tr>
+<tr><td data-label="Template Path"><a href="https://github.com/nickprignano/liquidware-ninja/blob/main/templates/stratusphere/inspector-catalog.json"><code>stratusphere/inspector-catalog.json</code></a></td><td data-label="Product">Stratusphere UX</td><td data-label="What It Defines">Inspector IDs, default <code>basis</code> dimensions, sample columns, and SpotCheck thresholds.</td></tr>
+<tr><td data-label="Template Path"><a href="https://github.com/nickprignano/liquidware-ninja/blob/main/templates/commandctrl/multisession-baseline.json"><code>commandctrl/multisession-baseline.json</code></a></td><td data-label="Product">CommandCTRL</td><td data-label="What It Defines">Multi-session security, privacy, and Stratusphere coexistence baseline.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+<!-- shell:foot -->
+</div>
+<footer class="foot"><div class="in"><p>Published from <a href="https://github.com/nickprignano/liquidware-ninja">nickprignano/liquidware-ninja</a>. Something wrong? Open an issue or a pull request in the repository it came from.</p>
+<p>Public repositories are open source under the MIT License (with 2ndbrain knowledge base tooling under Apache-2.0); private companion repositories reserve all rights. Liquidware, Stratusphere, ProfileUnity, FlexApp, Connector ID and CommandCTRL are trademarks of Liquidware Labs, Inc.; Azure, Azure Virtual Desktop, Windows 365, Microsoft Entra, Intune and FSLogix are trademarks of Microsoft.</p>
+<p class="credit">A <a href="https://prignano.ai/">prignano.ai</a> production · Part of <a href="https://avd-ops.dev/">avd-ops</a></p></div></footer>
+<button class="backdrop" type="button" tabindex="-1" aria-label="Close the pages list"></button>
+<!-- /shell:foot -->
+</body>
+</html>
