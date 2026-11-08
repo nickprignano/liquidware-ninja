@@ -75,3 +75,11 @@ errors:
   applies_to: FlexApp VHDX and FlexApp One packages across AVD, Citrix, and Horizon
   status: verified
   added: '2026-11-08'
+- id: azurerm-v5-provider-schema-break
+  symptom: 'terraform validate fails on azurerm_windows_virtual_machine (enable_automatic_updates), azurerm_private_dns_zone_virtual_network_link (private_dns_zone_name), and azurerm_storage_container (.resource_manager_id) when required_providers uses >= 4.0'
+  cause: Unbounded >= 4.0 pulls hashicorp/azurerm v5.x in CI, which removed v4 arguments and attributes in favor of v5 schema replacements
+  fix: Pin hashicorp/azurerm to ~> 4.0 in versions.tf until intentionally migrating to the v5 provider schema
+  source: deployment/gotchas.md#any-azure-lab
+  applies_to: Terraform modules in avd-liquidware (profileunity/terraform and stratusphere/terraform)
+  status: verified
+  added: '2026-11-08'
