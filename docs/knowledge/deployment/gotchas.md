@@ -3,7 +3,7 @@ title: "Deployment gotchas"
 summary: "What trips up a Liquidware deployment in Azure, across products, with a link to where each is explained"
 topic: deployment
 status: verified
-last_reviewed: 2026-10-29
+last_reviewed: 2026-11-08
 ---
 
 # Deployment gotchas
@@ -41,6 +41,10 @@ explains it; errors with an exact message are in
   [tier spec, facts](https://github.com/nickprignano/avd-liquidware/blob/main/docs/spec.md#12-facts-and-what-is-still-unverified)).
 - On multi-session AVD with FlexApp through app attach or RemoteApp, a second user on the same host
   can get no FlexApp ([known errors](../troubleshooting/README.md)).
+- Cached `.msi` files under `C:\Windows\Installer` often have their embedded `MSCF` cabinet streams
+  stripped by Windows; check for an embedded CAB before queueing them for unattended FlexApp capture,
+  and verify captured layers don't exit with `0xC0000135` (`STATUS_DLL_NOT_FOUND`) on launch
+  ([flexapp/packaging-and-delivery.md](../flexapp/packaging-and-delivery.md#server-evaluation-package-conversion-and-headless-qa)).
 - FlexApp Sandbox Isolation needs nested virtualization in the VM
   ([avd/fit-with-avd-and-fslogix.md](../avd/fit-with-avd-and-fslogix.md)).
 - The tier resource group holds the only copy of the live ProfileUnity configuration, the FlexApp
