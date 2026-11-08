@@ -3,9 +3,10 @@ title: "FlexApp packaging, VHDX/CimFS and App Attach delivery"
 summary: "How FlexApp packages applications into elastic layers and delivers them natively or through AVD App Attach"
 topic: flexapp
 status: partial
-last_reviewed: 2026-10-29
+last_reviewed: 2026-11-08
 sources:
   - https://docs.liquidware.com/profileunity/en-us/695/flexapp-packaging-console-guide/welcome.htm
+  - https://docs.liquidware.com/profileunity/en-us/695/flexapp-packaging-automation-guide/welcome.htm
 ---
 
 # FlexApp packaging, VHDX/CimFS and App Attach delivery
@@ -41,3 +42,15 @@ When updating a packaged application from `v1` to `v2`:
 2. Register `<app>-<v2>` and assign it to the `QA` host pool / ring.
 3. Promote `<app>-<v2>` to `All` and remove the host pool reference from `<app>-<v1>`.
 4. Keep `<app>-<v1>` registered (unassigned) for instant rollback until explicitly retired.
+
+## Server evaluation, package conversion and headless QA
+
+When evaluating an existing RDSH or application server for FlexApp migration:
+
+1. **Three-tier layerability classification:**
+   - **Blocked or base-image:** Applications that install kernel-mode drivers (`Win32_SystemDriver` / `.sys` under `System32\drivers`), early-boot (`Boot`/`System`) services, print port monitors, EDR sensors, VPN virtual adapters, or core collaboration suites (`Microsoft 365 Apps`, `Teams`, `OneDrive`, `FSLogix`, `ProfileUnity`) belong in the golden image or Intune Win32 rather than a FlexApp layer.
+   - **Shared runtimes (route to golden image):** Visual C++ Redistributables (`2008`-`2022`), `.NET Framework`, `.NET Desktop Runtime`, and `Microsoft Edge WebView2 Runtime` should be installed once in the base image so 30+ FlexApp layers do not duplicate or conflict on side-by-side runtime DLLs.
+   - **Layerable and composite layers:** User-mode Win32/x64 apps, `.appv`, and `.msix` packages can be layered directly. When a line-of-business application requires a pinned legacy runtime (such as Oracle JRE 8, SAP Crystal Reports runtime, or an app-specific ODBC driver/DSN) or a coupled Office COM add-in, capture them together in topological order (`prerequisite-runtime` -> `primary-app` -> `companion-addin`) inside a single composite layer.
+2. **Cached MSI pitfall (`C:\Windows\Installer`):** Windows Installer routinely strips embedded `MSCF` cabinet streams from cached `.msi` files under `C:\Windows\Installer`. Always verify that a cached `.msi` still contains an embedded `MSCF` cabinet header before queueing it into unattended `fpa-packager.exe` capture; otherwise resolve the installer from the original `InstallSource` share or vendor media.
+3. **Archive and `.intunewin` inspection:** Do not rely on package filenames for metadata. Parse `AppxManifest.xml` directly from `.appv` and `.msix` ZIP streams (for `Identity`, `Publisher`, `Version`, and entry-point executables) and `IntuneWinPackage/Metadata/Detection.xml` inside `.intunewin` archives.
+4. **Headless post-capture launch QA:** After capturing or converting a VHDX, mount it read-only on a clean test VM, launch each discovered entry-point `.exe` for a short dwell window, and check process exit codes before publishing. Specifically fail builds that exit with `0xC0000135` (`STATUS_DLL_NOT_FOUND`), `0xC0000005` (`STATUS_ACCESS_VIOLATION`), or `0xC000007B` (`STATUS_INVALID_IMAGE_FORMAT`).

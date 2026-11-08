@@ -59,3 +59,19 @@ errors:
   applies_to: KB scripts before 2026-10-29
   status: verified
   added: '2026-10-29'
+- id: flexapp-cached-msi-stripped-cab
+  symptom: Unattended FlexApp capture queued from a server's C:\Windows\Installer\*.msi cached package fails mid-install asking for source media or missing cabinet files
+  cause: Windows Installer strips embedded MSCF cabinet streams from many cached MSIs in C:\Windows\Installer to save disk space, leaving only table metadata
+  fix: Verify the cached MSI contains an embedded MSCF cabinet header before capture; if stripped, resolve the installer from the registry InstallSource UNC path, recipe catalog, or original vendor media
+  source: flexapp/packaging-and-delivery.md#server-evaluation-package-conversion-and-headless-qa
+  applies_to: Windows Server / Windows 10 & 11 MSI cache with FlexApp Packaging Console or Automation
+  status: verified
+  added: '2026-11-08'
+- id: flexapp-launch-status-dll-not-found
+  symptom: A captured FlexApp package mounts cleanly, but launching the application executable exits immediately with code 0xC0000135 (-1073741515 / STATUS_DLL_NOT_FOUND) or 0xC000007B (STATUS_INVALID_IMAGE_FORMAT)
+  cause: The application depends on a shared runtime (such as VC++ Redistributable or .NET Desktop Runtime) absent from the session host base image, or a 32-bit/64-bit prerequisite runtime was not captured in the composite layer
+  fix: Install shared runtimes (VC++, .NET, WebView2) in the session host golden image and bundle app-specific prerequisites (pinned JRE, Crystal Reports, ODBC drivers) as pre-install steps in a composite FlexApp capture
+  source: flexapp/packaging-and-delivery.md#server-evaluation-package-conversion-and-headless-qa
+  applies_to: FlexApp VHDX and FlexApp One packages across AVD, Citrix, and Horizon
+  status: verified
+  added: '2026-11-08'
