@@ -64,6 +64,7 @@ contribute, open a KB feedback or known-error issue; changes land only through r
 - [0016. Follow the family's GitHub work conventions, with low-risk PRs merging themselves](docs/knowledge/decisions/0016-family-format-github-work-conventions.md): proposed
 - [0017. Consolidate the Liquidware second brain and toolkit in liquidware-ninja](docs/knowledge/decisions/0017-consolidate-liquidware-second-brain-in-liquidware-ninja.md): accepted
 - [0018. Family format: every scheduled KB issue has a way to a pull request or to closing itself](docs/knowledge/decisions/0018-family-format-close-scheduled-issue-loops.md): proposed
+- [0019. Publish the liquidware-ninja site on Cloudflare Workers under liquidware-ninja.prignano.ai](docs/knowledge/decisions/0019-publish-site-on-cloudflare.md): accepted
 
 ## Related knowledge bases
 

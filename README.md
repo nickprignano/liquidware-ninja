@@ -1,6 +1,6 @@
 # liquidware-ninja
 
-Part of [avd-ops](https://avd-ops.dev/), the open toolkit for Azure Virtual Desktop.
+Part of [avd-ops](https://avd-ops.dev/), the open toolkit for Azure Virtual Desktop. Published at **<https://liquidware-ninja.prignano.ai/>**.
 
 The **Liquidware second brain** and general catchall repository: a living knowledge base, architecture reference, technical blog, template library, and utility toolkit for running **Liquidware** products (**Stratusphere UX**, **ProfileUnity**, **FlexApp**, and **CommandCTRL**) across virtual and physical desktops (Azure Virtual Desktop, Windows 365, Citrix, Omnissa Horizon, RDS, and physical PCs).
 
@@ -17,9 +17,10 @@ The **Liquidware second brain** and general catchall repository: a living knowle
 
 | Repository | Role | Scope |
 |---|---|---|
-| **[liquidware-ninja](https://github.com/nickprignano/liquidware-ninja)** *(this repo)* | **The why and the reference (Second Brain & Toolkit)** | Living 2ndbrain knowledge base across all Liquidware products and platforms, technical field notes (`blog/`), reusable templates (`templates/`), and cross-platform PowerShell utilities (`scripts/tools/`) |
+| **[liquidware-ninja](https://github.com/nickprignano/liquidware-ninja)** *(this repo)* | **The why and the reference (Second Brain & Toolkit)** | Living 2ndbrain knowledge base across all Liquidware products and platforms, technical field notes (`blog/`), reusable templates (`templates/`), cross-platform PowerShell utilities (`scripts/tools/`), and the web site at `liquidware-ninja.prignano.ai` (`site/`) |
 | **[avd-liquidware](https://github.com/nickprignano/avd-liquidware)** | **The Azure / AVD deployment tier** | Bicep and PowerShell to deploy Stratusphere UX appliances, Connector ID Key rollouts, ProfileUnity consoles/clients, and FlexApp App Attach against an [avd-landing-zone](https://github.com/avd-ops/avd-landing-zone) estate |
-| **[ux-assess](https://github.com/nickprignano/ux-assess)** | **The Stratusphere UX assessment & deliverable pipeline** | Platform-agnostic Hub API exporter, canonical dataset normalizer, HMAC pseudonymizer, SpotCheck analyzer, and multi-format deliverable generator (`.xlsx`, `.pdf`, `.pptx`, Power BI PBIP) |
+| **ux-assess** *(private companion repo)* | **The Stratusphere UX assessment & deliverable pipeline** | Platform-agnostic Hub API exporter, canonical dataset normalizer, HMAC pseudonymizer, SpotCheck analyzer, and multi-format deliverable generator (`.xlsx`, `.pdf`, `.pptx`, Power BI PBIP) |
+| **flexapp-factory** *(private companion repo)* | **The application server evaluator & FlexApp packaging factory** | Evaluates existing Windows application servers, joins Stratusphere UX usage telemetry, builds dependency DAGs, converts legacy packages (`.appv`, `.msix`, `.intunewin`, PSADT), and drives unattended FlexApp captures and smoke tests |
 
 ## What's here
 
@@ -30,7 +31,8 @@ The **Liquidware second brain** and general catchall repository: a living knowle
 | [templates/](templates/README.md) | Reusable reference templates: ProfileUnity FSLogix-coexistence guardrails, ProfileUnity sample config export, FlexApp package metadata manifests, Stratusphere API Builder query catalog, and CommandCTRL multi-session security/privacy baseline |
 | [scripts/tools/](scripts/tools/LiquidwareNinja.psm1) | `LiquidwareNinja.psm1` (9 cross-platform functions) and `Test-LwCidKeyHealth.ps1` (PS 5.1/7+ endpoint health check for the Stratusphere Connector ID Key agent) |
 | [scripts/kb/](scripts/kb/build.py) | The 2ndbrain knowledge base curator, validator, freshness checker, and prior-art search tools |
-| [tests/](tests/LiquidwareNinja.Tests.ps1) | Offline Pester tests for `LiquidwareNinja.psm1`, `Test-LwCidKeyHealth.ps1`, and `blog/` (`scripts/kb/test_kb.py` covers the KB scripts) |
+| [site/](site/index.html), [scripts/site/](scripts/site/build-site.mjs) | Static web site published to `https://liquidware-ninja.prignano.ai/` on Cloudflare Workers (`wrangler.jsonc`), built with the vendored `avd-ops` design system (`ds-v2.7.0`) |
+| [tests/](tests/LiquidwareNinja.Tests.ps1) | Offline Pester tests for `LiquidwareNinja.psm1`, `Test-LwCidKeyHealth.ps1`, and `blog/`, plus `tests/site.test.mjs` for the web site (`scripts/kb/test_kb.py` covers the KB scripts) |
 
 ## PowerShell Toolkit (`scripts/tools/`)
 
@@ -71,6 +73,7 @@ pip install -r scripts/kb/requirements.txt
 python3 scripts/kb/build.py          # regenerate indexes, tables and llms.txt
 python3 scripts/kb/validate.py       # schemas, MADR, links, leak patterns, family
 python3 -m unittest discover -s scripts/kb
+npm ci && npm run build:site && npm test
 pwsh -c "foreach (\$p in 'scripts/tools','tests') { Invoke-ScriptAnalyzer -Path \$p -Recurse -Settings ./PSScriptAnalyzerSettings.psd1 -EnableExit }"
 pwsh -c "Invoke-Pester -Path ./tests -CI"
 ```

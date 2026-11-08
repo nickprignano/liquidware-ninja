@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ux-assess (Private Overview) | liquidware-ninja</title>
+<meta name="description" content="High-level architectural overview of ux-assess: the platform-agnostic Stratusphere UX assessment, normalization, HMAC pseudonymization, and deliverable pipeline.">
+<!-- shell:head -->
+<link rel="icon" href="../assets/brand/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/avd-ops.css">
+<link rel="stylesheet" href="../assets/avd-ops-shell.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script src="../assets/theme.js"></script>
+<!-- /shell:head -->
+</head>
+<body class="shell">
+<!-- shell:top -->
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar"><div class="bar-in"><a class="brand" href="../index.html"><img class="mark" src="../assets/brand/mark.svg" alt="" width="44" height="44"><span class="name"><span class="word">liquidware-ninja</span><span class="tag">Second brain &amp; toolkit</span></span></a>
+<nav class="switcher" aria-label="Site sections"><a href="../index.html" aria-current="true">Liquidware</a><a href="../docs/index.html">KB</a><a href="../blog/index.html">Blog</a><a href="https://avd-ops.dev/">avd-ops.dev</a></nav>
+<details class="notice"><summary><strong class="long">Personal project. Research and learning only. Not for production. No warranty.</strong><strong class="short">Not for production</strong></summary>
+<div class="full"><ul><li>Built on my own time for research and learning. Not affiliated with, endorsed by or supported by my employer, Liquidware or Microsoft.</li>
+<li>Bring your own Liquidware licenses. Don't run any of it in production or against tenants and subscriptions that matter. Test in a dedicated lab first.</li>
+<li>Provided "as is", without warranty of any kind, under each repository's license. You use it at your own risk and own the Azure charges it incurs.</li>
+<li><strong>Contributions and forks are welcome and encouraged on public repos.</strong> See <a href="../index.html#contribute">Contribute</a>.</li></ul></div></details>
+<div class="tools"><button class="iconbtn theme" type="button" aria-label="Switch theme"><svg class="sun" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.5"/><path d="M10 1.8v2.2M10 16v2.2M1.8 10H4M16 10h2.2M4.2 4.2l1.6 1.6M14.2 14.2l1.6 1.6M4.2 15.8l1.6-1.6M14.2 5.8l1.6-1.6"/></svg><svg class="moon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 12.4A7 7 0 0 1 7.6 3.5a7 7 0 1 0 8.9 8.9Z"/></svg></button><button class="iconbtn menu" type="button" aria-label="Pages" aria-expanded="false" aria-controls="side"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 5.5h14M3 10h14M3 14.5h14"/></svg></button></div></div></header>
+<div class="layout"><nav class="side" id="side" aria-label="Pages">
+<p class="group">Start</p><a href="../index.html">Overview</a><a href="../architecture.html">Architecture</a><a href="../toolkit.html">PowerShell toolkit</a><a href="../blog/index.html">Field notes (Blog)</a><a href="../docs/index.html">Knowledge base</a>
+<p class="group">Liquidware Repos</p><a href="../repos/liquidware-ninja.html">liquidware-ninja</a><a href="../repos/avd-liquidware.html">avd-liquidware</a><a href="../repos/ux-assess.html" aria-current="page">ux-assess (private)</a><a href="../repos/flexapp-factory.html">flexapp-factory (private)</a><a href="../index.html#avd-ops">avd-ops family</a>
+<p class="group">Knowledge Base</p><a href="../docs/liquidware/products.html">Products & docs</a><a href="../docs/platforms/multi-platform-matrix.html">Multi-platform matrix</a><a href="../docs/avd/fit-with-avd-and-fslogix.html">Fit with AVD & FSLogix</a><a href="../docs/stratusphere/api.html">Stratusphere API</a><a href="../docs/stratusphere/spotcheck-and-sizing.html">SpotCheck & sizing</a><a href="../docs/profileunity/architecture-and-portability.html">ProfileUnity & Portability</a><a href="../docs/flexapp/packaging-and-delivery.html">FlexApp & App Attach</a><a href="../docs/commandctrl/overview.html">CommandCTRL</a><a href="../docs/deployment/gotchas.html">Deployment gotchas</a><a href="../docs/troubleshooting/index.html">Known errors</a><a href="../docs/decisions/index.html">Decisions</a><a href="../docs/graph.html">Graph</a>
+</nav>
+<!-- /shell:top -->
+<main id="main">
+<div class="col">
+<h1>ux-assess</h1>
+<p class="lede">High-level overview of the private <strong>Liquidware Stratusphere UX</strong> assessment and deliverable pipeline: pulls telemetry from the Hub API (or Inspector exports), verifies collection health, normalizes and HMAC-pseudonymizes five canonical tables, scores platform-aware SpotCheck thresholds, classifies applications for Base Image vs. FlexApp delivery, and generates multi-format deliverables from one set of findings.</p>
+<div class="chips"><span class="badge b-private">Private Companion Repo</span><span class="chip">Python 3.10+</span><span class="chip">PowerShell 7</span><span class="chip">Stratusphere /lwl/api</span><span class="chip">Power BI PBIP (TMDL/PBIR)</span></div>
+
+<h2 id="pipeline">Five-Stage Pipeline Architecture</h2>
+<div class="tbl" tabindex="0" role="region" aria-label="ux-assess pipeline stages">
+<table class="stacked">
+<thead><tr><th>Stage</th><th>What It Does</th><th>Key Design Choice</th></tr></thead>
+<tbody>
+<tr><td data-label="Stage"><strong>1. Intake &amp; Collection Health</strong></td><td data-label="What It Defines">Configures engagement metadata (<code>current-state</code>, <code>performance</code>, <code>sizing</code>, or <code>migration-baseline</code>) and compares Hub machines against expected inventory (<code>active</code>, <code>dropped_off</code>, <code>sparse</code>, <code>inventory_only</code>, <code>missing_from_hub</code>).</td><td data-label="Key Design Choice">Catches silent Connector ID Key callback failures before sizing or performance conclusions are drawn.</td></tr>
+<tr><td data-label="Stage"><strong>2. Pull or Import</strong></td><td data-label="What It Defines">Queries <code>https://&lt;hub&gt;/lwl/api?json=...</code> across Inspectors <code>0</code>, <code>1</code>, <code>2</code>, <code>3</code>, <code>4</code>, and <code>10</code> with explicit business-hour slices, or ingests offline Inspector <code>.xlsx</code>/<code>.csv</code> exports when the Hub API is unreachable.</td><td data-label="Key Design Choice">Defaults to a dry-run <code>Plan</code> mode that prints every query before making network calls; enforces TLS certificate trust.</td></tr>
+<tr><td data-label="Stage"><strong>3. Normalize &amp; Pseudonymize</strong></td><td data-label="What It Defines">Maps Hub columns into five canonical tables (<code>machines</code>, <code>machine_hourly</code>, <code>app_usage</code>, <code>logins</code>, <code>ux_daily</code>) and hashes user/machine identifiers with keyed HMAC-SHA256.</td><td data-label="Key Design Choice">Same customer-held HMAC key across <code>before</code> and <code>after</code> runs preserves cohort joins without exporting raw PII.</td></tr>
+<tr><td data-label="Stage"><strong>4. Analyze (SpotCheck &amp; Sizing)</strong></td><td data-label="What It Defines">Evaluates business-hour <code>p95</code> metrics against platform-aware SpotCheck thresholds, computes right-sized compute tiers (<code>Light</code>, <code>Medium</code>, <code>Heavy</code>, <code>Power</code>), and tiers applications for Base Image vs. FlexApp layering.</td><td data-label="Key Design Choice">Missing or unmapped columns are explicitly reported as <code>"not measured"</code> rather than silently passing checks.</td></tr>
+<tr><td data-label="Stage"><strong>5. Multi-Format Deliverables</strong></td><td data-label="What It Defines">Renders an Excel workbook (<code>.xlsx</code>), PDF report (<code>.pdf</code>), PowerPoint deck (<code>.pptx</code>), and a text-based Power BI Project (<code>.pbip</code> with TMDL semantic model and PBIR visuals) reading the local canonical dataset.</td><td data-label="Key Design Choice">Decouples Power BI from live Hub refreshes so models are diffable in Git and reproducible offline.</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2 id="engagements">Supported Engagement &amp; Platform Modes</h2>
+<ul>
+<li><strong>Desktop Platforms:</strong> Physical Windows PCs (<code>physical</code>), Citrix CVAD/DaaS (<code>citrix</code>), Omnissa Horizon (<code>horizon</code>), Windows Server RDS (<code>rds</code>), Azure Virtual Desktop (<code>avd</code>), and Windows 365 (<code>w365</code>).</li>
+<li><strong>Engagement Types:</strong>
+  <ul>
+    <li><code>current-state</code>: Scope, collection quality, executive summary, SpotCheck findings, hardware/OS inventory, application footprint, right-sizing tiers.</li>
+    <li><code>performance</code>: Time-of-day hotspot heatmaps by business hour, top offending machines, CPU/disk/memory queue diagnostics, and logon breakdown.</li>
+    <li><code>sizing</code>: Right-sizing SKU distribution based on business-hour <code>p95</code> CPU and memory demand.</li>
+    <li><code>migration-baseline</code>: Before-and-after KPI deltas comparing legacy VDI/RDS against target AVD or Windows 365 pools via <code>baseline.json</code>.</li>
+  </ul>
+</li>
+</ul>
+
+<h2 id="public-docs">Public Reference Material in liquidware-ninja</h2>
+<p>While the <code>ux-assess</code> codebase remains private, its full methodology, SpotCheck threshold catalog, API reference, and Power BI architecture are documented openly in this repository:</p>
+<p class="actions">
+<a class="cta" href="../docs/stratusphere/spotcheck-and-sizing.html">SpotCheck &amp; Canonical Dataset KB</a>
+<a class="cta ghost" href="../docs/stratusphere/api.html">Stratusphere API KB</a>
+<a class="cta ghost" href="../blog/2026-10-28-stratusphere-spotcheck-to-powerbi.html">Field Note: SpotCheck to Power BI PBIP</a>
+</p>
+</div>
+</main>
+<!-- shell:foot -->
+</div>
+<footer class="foot"><div class="in"><p>Published from <a href="https://github.com/nickprignano/liquidware-ninja">nickprignano/liquidware-ninja</a>. Something wrong? Open an issue or a pull request in the repository it came from.</p>
+<p>Public repositories are open source under the MIT License (with 2ndbrain knowledge base tooling under Apache-2.0); private companion repositories reserve all rights. Liquidware, Stratusphere, ProfileUnity, FlexApp, Connector ID and CommandCTRL are trademarks of Liquidware Labs, Inc.; Azure, Azure Virtual Desktop, Windows 365, Microsoft Entra, Intune and FSLogix are trademarks of Microsoft.</p>
+<p class="credit">A <a href="https://prignano.ai/">prignano.ai</a> production · Part of <a href="https://avd-ops.dev/">avd-ops</a></p></div></footer>
+<button class="backdrop" type="button" tabindex="-1" aria-label="Close the pages list"></button>
+<!-- /shell:foot -->
+</body>
+</html>

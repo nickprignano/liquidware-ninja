@@ -8,3 +8,6 @@ gitleaks.log
 output/
 media.lock.json
 testResults.xml
+
+node_modules/
+.wrangler/
