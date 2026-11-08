@@ -13,7 +13,7 @@ the family numbers its own decisions; refer to a sibling's as `<project> 0012`, 
 | [0002](0002-mit-license-apache-kb-tooling.md) | MIT for the repo; the knowledge base tooling keeps Apache-2.0 | Accepted |
 | [0003](0003-deploy-here-assess-and-design-elsewhere.md) | This repo deploys the Liquidware platform; assessment and design live elsewhere | Proposed |
 | [0004](0004-marketplace-appliances-no-vendor-binaries.md) | Deploy appliances from Azure Marketplace; no Liquidware binaries or license material in the repo | Proposed |
-| [0005](0005-bicep-with-azure-verified-modules.md) | Bicep with pinned Azure Verified Modules, following avd-landing-zone | Proposed |
+| [0005](0005-bicep-with-azure-verified-modules.md) | Bicep with pinned Azure Verified Modules alongside native Terraform (`~> 4.0`) | Accepted |
 | [0006](0006-credentials-in-key-vault.md) | Generated credentials go to Key Vault, and reruns reuse them | Proposed |
 | [0007](0007-real-runs-are-the-source-of-truth.md) | Real runs are the source of truth; every lesson adds a guard | Proposed |
 | [0008](0008-cloud-shell-baseline.md) | Everything runs from Azure Cloud Shell | Proposed |

@@ -55,3 +55,11 @@ explains it; errors with an exact message are in
 
 - Stopped isn't deallocated, and NAT Gateway, Bastion, public IPs and disks bill regardless
   ([azure/lab-costs.md](../azure/lab-costs.md)).
+- When maintaining Bicep and Terraform side by side (`avd-liquidware` `-Engine Bicep|Terraform`), pin
+  `hashicorp/azurerm` to `~> 4.0` (v5.0 removes `enable_automatic_updates`, `.resource_manager_id` on
+  storage containers, and `private_dns_zone_name` on DNS zone VNet links), account for 0-indexed
+  usable hosts in Bicep `cidrHost(prefix, 3)` vs network-address indexing in Terraform
+  `cidrhost(prefix, 4)`, and use singular `sourceAddressPrefix` / `source_address_prefix` when
+  `callbackSourcePrefixes` has a single service tag like `VirtualNetwork`
+  ([decisions/0005](../decisions/0005-bicep-with-azure-verified-modules.md),
+  [known errors](../troubleshooting/README.md)).

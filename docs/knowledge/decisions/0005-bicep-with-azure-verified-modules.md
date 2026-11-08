@@ -1,33 +1,30 @@
 ---
-status: proposed
-date: 2026-10-18
+status: accepted
+date: 2026-11-08
 decision-makers: [maintainers]
 ---
 
-# 0005. Bicep with pinned Azure Verified Modules, following avd-landing-zone
+# 0005. Bicep with pinned Azure Verified Modules alongside native Terraform (`~> 4.0`)
 
 ## Context and Problem Statement
 
-The family's guardrails prefer Azure-native, GitHub, HashiCorp and open-source tooling, and the
-reference kit uses Terraform. This project deploys a handful of Azure resources at subscription
-scope, often next to an AVD landing zone built with Bicep. Which infrastructure-as-code tool fits?
+The family's guardrails prefer Azure-native, GitHub, HashiCorp and open-source tooling. `avd-liquidware` deploys the ProfileUnity / FlexApp tier (`profileunity/`) and Stratusphere UX assessment appliances (`stratusphere/`) at subscription scope against an `avd-landing-zone` landing zone. Operators running from Azure Cloud Shell want zero-state Bicep by default, while Terraform operators across the family want HCL modules with full parameter, output, and security parity. Which infrastructure-as-code approach fits?
 
 ## Considered Options
 
-- Bicep with pinned Azure Verified Modules, following avd-landing-zone's conventions
-- Terraform with the azurerm provider, like nerdio-hcl
+- Bicep with pinned Azure Verified Modules (`bicep/`), following `avd-landing-zone`'s conventions
+- Terraform with native `hashicorp/azurerm` (`~> 4.0`) resources (`terraform/`), matching `nerdio-hcl`
+- Dual-engine (`-Engine Bicep|Terraform`) in the PowerShell entry points, keeping Bicep as the default and shipping native Terraform modules alongside it
 
 ## Decision Outcome
 
-Chosen option: "Bicep with Azure Verified Modules", because it's Azure-native, needs no state
-file or backend, runs from Cloud Shell as is, and matches the landing zone the assessed desktops
-usually sit in.
+Chosen option: "Dual-engine (`-Engine Bicep|Terraform`): Bicep with Azure Verified Modules alongside native `hashicorp/azurerm` (`~> 4.0`) resources", because Bicep stays the zero-state Cloud Shell default while Terraform users get exact parameter, resource, role-assignment, and output parity tested offline with `terraform test` (`mock_provider "azurerm"`) and Pester static guards.
 
 ### Consequences
 
-- Good, because there's no state to store or protect, and what-if previews come free.
-- Neutral, because Bicep is Azure-native, which the guardrails list alongside HashiCorp.
-- Bad, because Terraform users of the family can't reuse these modules directly.
+- Good, because Cloud Shell operators need no state backend (`-Engine Bicep`), and Terraform operators can run `profileunity/terraform/` and `stratusphere/terraform/` directly or via `-Engine Terraform`.
+- Good, because using native `azurerm` resources (`~> 4.0`) rather than opaque module wrappers lets Pester and `terraform test` inspect every role assignment scope, NSG rule, and Marketplace `plan` block offline.
+- Neutral, because Pester parity tests enforce that `variables.tf` and `outputs.tf` stay in lockstep with `main.bicep`.
 
 ## More Information
 
