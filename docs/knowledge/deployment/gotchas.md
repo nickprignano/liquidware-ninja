@@ -2,8 +2,8 @@
 title: "Deployment gotchas"
 summary: "What trips up a Liquidware deployment in Azure, across products, with a link to where each is explained"
 topic: deployment
-status: partial
-last_reviewed: 2026-10-20
+status: verified
+last_reviewed: 2026-10-29
 ---
 
 # Deployment gotchas
@@ -20,8 +20,11 @@ explains it; errors with an exact message are in
   address was baked in ([stratusphere/connector-id-key.md](../stratusphere/connector-id-key.md)).
 - Callbacks need TCP 443 from the desktops to the Hub; a higher-priority NSG deny or a firewall on a
   hub route silently stops them ([azure/networking.md](../azure/networking.md)).
-- An appliance keeps the password it was created with, so reruns must reuse it
+- An appliance keeps the password it was created with, so reruns must reuse it. That Azure credential
+  is the appliance's SSH login; the web console's `ssadmin` default is separate and needs changing
   ([stratusphere/appliances.md](../stratusphere/appliances.md)).
+- Leave the Hub's **API Client IPs** empty: addresses there read the API without credentials
+  ([stratusphere/hub-setup.md](../stratusphere/hub-setup.md)).
 - The Hub and the Database appliance hold the only copy of the assessment data: removing either
   deletes it. Export first; `Cleanup` refuses without `-DiscardLastCopy`
   ([avd-second-brain decision 0016](https://github.com/nickprignano/avd-second-brain/blob/main/docs/knowledge/decisions/0016-never-delete-the-last-copy.md)).
@@ -34,7 +37,10 @@ explains it; errors with an exact message are in
   ([avd/fit-with-avd-and-fslogix.md](../avd/fit-with-avd-and-fslogix.md)).
 - Images without a domain can't grant a domain service account "log on as a service"; ProfileUnity
   6.9.5 can run its startup service as LocalSystem instead
-  ([tier spec, facts](https://github.com/nickprignano/avd-liquidware/blob/main/docs/spec.md#12-facts-and-what-is-still-unverified)).
+  ([support article](https://support.liquidware.com/hc/en-us/articles/45857909352205-Running-ProfileUnity-and-FlexApps-at-boot-using-a-Service-Account),
+  [tier spec, facts](https://github.com/nickprignano/avd-liquidware/blob/main/docs/spec.md#12-facts-and-what-is-still-unverified)).
+- On multi-session AVD with FlexApp through app attach or RemoteApp, a second user on the same host
+  can get no FlexApp ([known errors](../troubleshooting/README.md)).
 - FlexApp Sandbox Isolation needs nested virtualization in the VM
   ([avd/fit-with-avd-and-fslogix.md](../avd/fit-with-avd-and-fslogix.md)).
 - The tier resource group holds the only copy of the live ProfileUnity configuration, the FlexApp

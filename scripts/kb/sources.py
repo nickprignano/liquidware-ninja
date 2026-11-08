@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import json
 import os
+import time
 import tomllib
+import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -35,10 +37,22 @@ class Item:
     note: str = ""
 
 
+RETRY_DELAY = 5  # seconds before the one retry on a server error
+
+
 def http_get(url: str, headers: dict | None = None) -> bytes:
+    """GET a URL, retrying once after RETRY_DELAY on a 5xx (feeds such as YouTube's return
+    transient HTTP 500s)."""
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, **(headers or {})})
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        return resp.read()
+    for attempt in (1, 2):
+        try:
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                return resp.read()
+        except urllib.error.HTTPError as exc:
+            if attempt == 2 or exc.code < 500:
+                raise
+            time.sleep(RETRY_DELAY)
+    raise AssertionError("unreachable")
 
 
 def github(path: str, params: dict | None = None):

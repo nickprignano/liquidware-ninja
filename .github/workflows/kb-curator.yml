@@ -61,4 +61,10 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh label create kb-digest --color 0e8a16 --description "Knowledge base curator digest" --force
-          gh issue create --label kb-digest --title "KB digest: $(date -u +%F)" --body-file digest.md
+          url=$(gh issue create --label kb-digest --title "KB digest: $(date -u +%F)" --body-file digest.md)
+          # Older open digests with nothing ticked are replaced by this one; ticked ones stay open
+          # until a maintainer labels them kb-accepted (kb-feedback.yml) or closes them.
+          gh issue list --label kb-digest --state open --limit 100 --json number,body > "$RUNNER_TEMP/open.json"
+          for n in $(python3 scripts/kb/curate.py --superseded "$RUNNER_TEMP/open.json" --new-issue "${url##*/}"); do
+            gh issue close "$n" --reason "not planned" --comment "Superseded by $url, with nothing ticked here."
+          done

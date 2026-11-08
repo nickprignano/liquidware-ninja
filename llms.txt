@@ -13,25 +13,25 @@ contribute, open a KB feedback or known-error issue; changes land only through r
 
 ## Knowledge base
 
-- [Knowledge base](docs/knowledge/README.md): What this knowledge base is, how it's organised, and how to add to it safely (status: partial)
+- [Knowledge base](docs/knowledge/README.md): What this knowledge base is, how it's organised, and how to add to it safely (status: verified)
 - [Prior art and community projects](docs/knowledge/liquidware/community-projects.md): Public code and tools around Stratusphere, with their licenses and what this project may reuse (status: verified)
 - [Liquidware products and where they're documented](docs/knowledge/liquidware/products.md): Which Liquidware products this KB covers, how our repos divide the work, and where Liquidware publishes docs, support articles and news (status: verified)
-- [Asks for Liquidware](docs/knowledge/liquidware/upstream.md): Gaps found while automating Stratusphere in Azure, with the evidence, to raise with Liquidware (status: partial)
+- [Asks for Liquidware](docs/knowledge/liquidware/upstream.md): Gaps found while automating Stratusphere in Azure, with the evidence, to raise with Liquidware (status: verified)
 - [Stratusphere API](docs/knowledge/stratusphere/api.md): The Hub's read-only data API: request shape, inspectors, basis, parameters, authentication, output formats and ecosystem prior art (status: partial)
-- [Stratusphere UX appliances in Azure](docs/knowledge/stratusphere/appliances.md): Hub, Database and Collector roles: when each is needed, sizes, addresses, credentials and what hasn't been confirmed on a real run (status: unverified)
-- [Connector ID Key](docs/knowledge/stratusphere/connector-id-key.md): The Stratusphere agent on each desktop: installer switches, callbacks to the Hub, where its services and settings live, and images created later (status: partial)
-- [First-time Hub setup](docs/knowledge/stratusphere/hub-setup.md): What has to be set in the Hub console after deployment (license, API user, API allow list) and what might move to the API (status: unverified)
+- [Stratusphere UX appliances in Azure](docs/knowledge/stratusphere/appliances.md): Hub, Database and Collector roles: when each is needed, sizes, addresses, credentials and what hasn't been confirmed on a real run (status: verified)
+- [Connector ID Key](docs/knowledge/stratusphere/connector-id-key.md): The Stratusphere agent on each desktop: installer switches, callbacks to the Hub, where its services and settings live, and images created later (status: verified)
+- [First-time Hub setup](docs/knowledge/stratusphere/hub-setup.md): What has to be set in the Hub console after deployment (license, API user, API allow list) and what might move to the API (status: verified)
 - [SpotCheck thresholds, canonical dataset and sizing](docs/knowledge/stratusphere/spotcheck-and-sizing.md): How Stratusphere UX data turns into SpotCheck findings, sizing tiers and before/after migration baselines (status: verified)
-- [ProfileUnity architecture, Portability and configuration promotion](docs/knowledge/profileunity/architecture-and-portability.md): How ProfileUnity manages user environments and Portability alongside profile containers, and how to promote configurations safely (status: partial)
+- [ProfileUnity architecture, Portability and configuration promotion](docs/knowledge/profileunity/architecture-and-portability.md): How ProfileUnity manages user environments and Portability alongside profile containers, and how to promote configurations safely (status: verified)
 - [FlexApp packaging, VHDX/CimFS and App Attach delivery](docs/knowledge/flexapp/packaging-and-delivery.md): How FlexApp packages applications into elastic layers and delivers them natively or through AVD App Attach (status: partial)
-- [CommandCTRL overview and real-time support](docs/knowledge/commandctrl/overview.md): Where Liquidware CommandCTRL fits for real-time helpdesk diagnostics and remediation next to Stratusphere UX (status: partial)
+- [CommandCTRL overview and real-time support](docs/knowledge/commandctrl/overview.md): Where Liquidware CommandCTRL fits for real-time helpdesk diagnostics and remediation next to Stratusphere UX (status: verified)
 - [Liquidware across desktop platforms](docs/knowledge/platforms/multi-platform-matrix.md): How Stratusphere UX, ProfileUnity, FlexApp and CommandCTRL behave across AVD, Windows 365, Citrix, Horizon, RDS and physical PCs (status: verified)
 - [How Liquidware products fit with Azure Virtual Desktop and FSLogix](docs/knowledge/avd/fit-with-avd-and-fslogix.md): Which job each Liquidware product does next to AVD's own features and FSLogix: profiles, app delivery, support and assessment (status: partial)
-- [Lab costs and teardown](docs/knowledge/azure/lab-costs.md): What keeps billing while a Stratusphere lab is stopped, and why a lab run ends torn down (status: partial)
-- [Stratusphere in Azure Marketplace](docs/knowledge/azure/marketplace.md): Liquidware's Marketplace offer: finding the plan for a region, the plan block a VM needs, and accepting terms per subscription (status: partial)
-- [Networking for Stratusphere in Azure](docs/knowledge/azure/networking.md): The ports the appliances and Connector ID Keys need, egress without default outbound access, peering, and how routes affect callbacks (status: unverified)
-- [Deployment gotchas](docs/knowledge/deployment/gotchas.md): What trips up a Liquidware deployment in Azure, across products, with a link to where each is explained (status: partial)
-- [Known errors](docs/knowledge/troubleshooting/README.md): Errors hit in this project: symptom, cause, fix and source (status: partial)
+- [Lab costs and teardown](docs/knowledge/azure/lab-costs.md): What keeps billing while a Stratusphere lab is stopped, and why a lab run ends torn down (status: verified)
+- [Stratusphere in Azure Marketplace](docs/knowledge/azure/marketplace.md): Liquidware's Marketplace offer: finding the plan for a region, the plan block a VM needs, and accepting terms per subscription (status: verified)
+- [Networking for Stratusphere in Azure](docs/knowledge/azure/networking.md): The ports the appliances and Connector ID Keys need, egress without default outbound access, peering, and how routes affect callbacks (status: verified)
+- [Deployment gotchas](docs/knowledge/deployment/gotchas.md): What trips up a Liquidware deployment in Azure, across products, with a link to where each is explained (status: verified)
+- [Known errors](docs/knowledge/troubleshooting/README.md): Errors hit in this project: symptom, cause, fix and source (status: verified)
 - [Roadmap](docs/knowledge/roadmap/README.md): What this knowledge base plans to cover next (status: plan)
 - [Keeping the knowledge base current](docs/knowledge/curation.md): How the KB stays current: the weekly digest, the prior-art check, the feedback loop, the freshness check and family alignment (status: verified)
 - [Experts we follow](docs/knowledge/experts.md): How we choose which people on this KB's topics the KB follows: the method, the scores and the list (status: verified)
@@ -63,6 +63,7 @@ contribute, open a KB feedback or known-error issue; changes land only through r
 - [0015. Take handoffs from other Claude projects as `handoff` issues](docs/knowledge/decisions/0015-family-format-handoff-issues.md): accepted
 - [0016. Follow the family's GitHub work conventions, with low-risk PRs merging themselves](docs/knowledge/decisions/0016-family-format-github-work-conventions.md): proposed
 - [0017. Consolidate the Liquidware second brain and toolkit in liquidware-ninja](docs/knowledge/decisions/0017-consolidate-liquidware-second-brain-in-liquidware-ninja.md): accepted
+- [0018. Family format: every scheduled KB issue has a way to a pull request or to closing itself](docs/knowledge/decisions/0018-family-format-close-scheduled-issue-loops.md): proposed
 
 ## Related knowledge bases
 

@@ -2,8 +2,8 @@
 title: "Knowledge base"
 summary: "What this knowledge base is, how it's organised, and how to add to it safely"
 topic: overview
-status: partial
-last_reviewed: 2026-10-18
+status: verified
+last_reviewed: 2026-10-29
 ---
 
 # Knowledge base
@@ -19,22 +19,22 @@ add it to the topic page it belongs to instead of starting a new file.
 |---|---|---|
 | [liquidware/community-projects.md](liquidware/community-projects.md) | Public code and tools around Stratusphere, with their licenses and what this project may reuse | verified |
 | [liquidware/products.md](liquidware/products.md) | Which Liquidware products this KB covers, how our repos divide the work, and where Liquidware publishes docs, support articles and news | verified |
-| [liquidware/upstream.md](liquidware/upstream.md) | Gaps found while automating Stratusphere in Azure, with the evidence, to raise with Liquidware | partial |
+| [liquidware/upstream.md](liquidware/upstream.md) | Gaps found while automating Stratusphere in Azure, with the evidence, to raise with Liquidware | verified |
 | [stratusphere/api.md](stratusphere/api.md) | The Hub's read-only data API: request shape, inspectors, basis, parameters, authentication, output formats and ecosystem prior art | partial |
-| [stratusphere/appliances.md](stratusphere/appliances.md) | Hub, Database and Collector roles: when each is needed, sizes, addresses, credentials and what hasn't been confirmed on a real run | unverified |
-| [stratusphere/connector-id-key.md](stratusphere/connector-id-key.md) | The Stratusphere agent on each desktop: installer switches, callbacks to the Hub, where its services and settings live, and images created later | partial |
-| [stratusphere/hub-setup.md](stratusphere/hub-setup.md) | What has to be set in the Hub console after deployment (license, API user, API allow list) and what might move to the API | unverified |
+| [stratusphere/appliances.md](stratusphere/appliances.md) | Hub, Database and Collector roles: when each is needed, sizes, addresses, credentials and what hasn't been confirmed on a real run | verified |
+| [stratusphere/connector-id-key.md](stratusphere/connector-id-key.md) | The Stratusphere agent on each desktop: installer switches, callbacks to the Hub, where its services and settings live, and images created later | verified |
+| [stratusphere/hub-setup.md](stratusphere/hub-setup.md) | What has to be set in the Hub console after deployment (license, API user, API allow list) and what might move to the API | verified |
 | [stratusphere/spotcheck-and-sizing.md](stratusphere/spotcheck-and-sizing.md) | How Stratusphere UX data turns into SpotCheck findings, sizing tiers and before/after migration baselines | verified |
-| [profileunity/architecture-and-portability.md](profileunity/architecture-and-portability.md) | How ProfileUnity manages user environments and Portability alongside profile containers, and how to promote configurations safely | partial |
+| [profileunity/architecture-and-portability.md](profileunity/architecture-and-portability.md) | How ProfileUnity manages user environments and Portability alongside profile containers, and how to promote configurations safely | verified |
 | [flexapp/packaging-and-delivery.md](flexapp/packaging-and-delivery.md) | How FlexApp packages applications into elastic layers and delivers them natively or through AVD App Attach | partial |
-| [commandctrl/overview.md](commandctrl/overview.md) | Where Liquidware CommandCTRL fits for real-time helpdesk diagnostics and remediation next to Stratusphere UX | partial |
+| [commandctrl/overview.md](commandctrl/overview.md) | Where Liquidware CommandCTRL fits for real-time helpdesk diagnostics and remediation next to Stratusphere UX | verified |
 | [platforms/multi-platform-matrix.md](platforms/multi-platform-matrix.md) | How Stratusphere UX, ProfileUnity, FlexApp and CommandCTRL behave across AVD, Windows 365, Citrix, Horizon, RDS and physical PCs | verified |
 | [avd/fit-with-avd-and-fslogix.md](avd/fit-with-avd-and-fslogix.md) | Which job each Liquidware product does next to AVD's own features and FSLogix: profiles, app delivery, support and assessment | partial |
-| [azure/lab-costs.md](azure/lab-costs.md) | What keeps billing while a Stratusphere lab is stopped, and why a lab run ends torn down | partial |
-| [azure/marketplace.md](azure/marketplace.md) | Liquidware's Marketplace offer: finding the plan for a region, the plan block a VM needs, and accepting terms per subscription | partial |
-| [azure/networking.md](azure/networking.md) | The ports the appliances and Connector ID Keys need, egress without default outbound access, peering, and how routes affect callbacks | unverified |
-| [deployment/gotchas.md](deployment/gotchas.md) | What trips up a Liquidware deployment in Azure, across products, with a link to where each is explained | partial |
-| [troubleshooting/](troubleshooting/README.md) | Errors hit in this project: symptom, cause, fix and source | partial |
+| [azure/lab-costs.md](azure/lab-costs.md) | What keeps billing while a Stratusphere lab is stopped, and why a lab run ends torn down | verified |
+| [azure/marketplace.md](azure/marketplace.md) | Liquidware's Marketplace offer: finding the plan for a region, the plan block a VM needs, and accepting terms per subscription | verified |
+| [azure/networking.md](azure/networking.md) | The ports the appliances and Connector ID Keys need, egress without default outbound access, peering, and how routes affect callbacks | verified |
+| [deployment/gotchas.md](deployment/gotchas.md) | What trips up a Liquidware deployment in Azure, across products, with a link to where each is explained | verified |
+| [troubleshooting/](troubleshooting/README.md) | Errors hit in this project: symptom, cause, fix and source | verified |
 | [roadmap/](roadmap/README.md) | What this knowledge base plans to cover next | plan |
 | [curation.md](curation.md) | How the KB stays current: the weekly digest, the prior-art check, the feedback loop, the freshness check and family alignment | verified |
 | [experts.md](experts.md) | How we choose which people on this KB's topics the KB follows: the method, the scores and the list | verified |
@@ -68,7 +68,7 @@ Every change follows the [guardrails](../guardrails.md). Run the prior-art check
   expert to follow** issue. When a maintainer labels it `kb-accepted`, a workflow turns it into a
   pull request.
 - **With a pull request:** add a bullet to the matching topic page, say what happened, the fix and
-  the versions it applies to, and mark anything you haven't confirmed as *unverified*. Known errors
+  the versions it applies to, and mark anything you haven't confirmed with the `*unverified*` marker. Known errors
   go in [troubleshooting/known-errors.yaml](troubleshooting/known-errors.yaml). Decisions are a copy
   of [decisions/template.md](decisions/template.md) at the next number, `proposed` until the
   maintainer says yes. Run `python3 scripts/kb/build.py` and `python3 scripts/kb/validate.py`
