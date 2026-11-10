@@ -83,10 +83,10 @@
   },
   {
    "id": "decisions/0005-bicep-with-azure-verified-modules.md",
-   "title": "0005. Bicep with pinned Azure Verified Modules, following avd-landing-zone",
+   "title": "0005. Bicep with pinned Azure Verified Modules alongside native Terraform (`~> 4.0`)",
    "url": "decisions/0005-bicep-with-azure-verified-modules.html",
    "topic": "decisions",
-   "status": "proposed"
+   "status": "accepted"
   },
   {
    "id": "decisions/0006-credentials-in-key-vault.md",
@@ -561,6 +561,10 @@
    "target": "azure/lab-costs.md"
   },
   {
+   "source": "deployment/gotchas.md",
+   "target": "decisions/0005-bicep-with-azure-verified-modules.md"
+  },
+  {
    "source": "experts.md",
    "target": "curation.md"
   },
@@ -707,6 +711,10 @@
   {
    "source": "troubleshooting/README.md",
    "target": "flexapp/packaging-and-delivery.md"
+  },
+  {
+   "source": "troubleshooting/README.md",
+   "target": "deployment/gotchas.md"
   }
  ]
 }

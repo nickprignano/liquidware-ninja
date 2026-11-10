@@ -9,7 +9,7 @@ last_reviewed: 2026-10-29
 # Stratusphere UX appliances in Azure
 
 Stratusphere UX runs as Linux appliances from Azure Marketplace. This repo deploys them with
-[`Deploy-Stratusphere.ps1`](https://github.com/nickprignano/avd-liquidware/blob/main/stratusphere/docs/appliances.md); this page holds the facts
+[`Deploy-Stratusphere.ps1`](https://github.com/avd-ops/avd-liquidware/blob/main/stratusphere/docs/appliances.md); this page holds the facts
 behind it, checked against Liquidware's 6.7.1 documentation. None of it has been through a lab run
 on a real subscription yet.
 

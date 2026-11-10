@@ -8,7 +8,7 @@ last_reviewed: 2026-10-28
 
 # Liquidware products and where they're documented
 
-This knowledge base (`liquidware-ninja`) is the central second brain for all four **Liquidware** products across virtual and physical desktops, backing both [`avd-liquidware`](https://github.com/nickprignano/avd-liquidware) (Azure / AVD deployment automation) and [`ux-assess`](https://github.com/nickprignano/ux-assess) (Stratusphere UX assessment and deliverable automation).
+This knowledge base (`liquidware-ninja`) is the central second brain for all four **Liquidware** products across virtual and physical desktops, backing both [`avd-liquidware`](https://github.com/avd-ops/avd-liquidware) (Azure / AVD deployment automation) and [`ux-assess`](https://github.com/nickprignano/ux-assess) (Stratusphere UX assessment and deliverable automation).
 
 | Product | What it does | Covered here |
 |---|---|---|

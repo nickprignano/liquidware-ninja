@@ -41,19 +41,19 @@
 <li><strong>Stratusphere UX in Azure (<code>stratusphere/</code>):</strong> Subscription/network preflight checks, Azure Marketplace Hub, Database, and Collector appliance deployment, Connector ID Key rollout across session hosts via Azure Run Command, and safe teardown that enforces the family's <em>never delete the last copy</em> rule.</li>
 <li><strong>ProfileUnity &amp; FlexApp Tier in Bicep (<code>profileunity/bicep/main.bicep</code>):</strong> Subscription-scoped Bicep deploying <code>rg-&lt;base&gt;-liquidware</code>, spoke VNet peering, Private DNS zone links, Key Vault, Premium Azure Files shares (<code>lwconfig</code>, <code>portability</code>, <code>appattach</code>) with <code>allowSharedKeyAccess: false</code> and Entra Kerberos, and the ProfileUnity Management Console VM.</li>
 <li><strong>Two-Step Configuration Promotion &amp; App Attach Registration (<code>scripts/</code>):</strong> <code>Deploy-LiquidwareTier.ps1</code>, Managed Identity blob staging to on-demand ACI file-share promotion, and operator-registered AVD App Attach without storing standing Entra client secrets on the console VM.</li>
-<li><strong>Red-Teamed Specifications (<code>docs/</code>):</strong> Detailed architecture specifications (<a href="https://github.com/nickprignano/avd-liquidware/blob/main/docs/spec.md"><code>docs/spec.md</code></a> and <a href="https://github.com/nickprignano/avd-liquidware/blob/main/docs/deploy-spec.md"><code>docs/deploy-spec.md</code></a>) defining product ownership boundaries, RBAC per path, cost controls, and security reviews.</li>
+<li><strong>Red-Teamed Specifications (<code>docs/</code>):</strong> Detailed architecture specifications (<a href="https://github.com/avd-ops/avd-liquidware/blob/main/docs/spec.md"><code>docs/spec.md</code></a> and <a href="https://github.com/avd-ops/avd-liquidware/blob/main/docs/deploy-spec.md"><code>docs/deploy-spec.md</code></a>) defining product ownership boundaries, RBAC per path, cost controls, and security reviews.</li>
 </ul>
 
 <h2 id="try-it">Try It in Azure Cloud Shell</h2>
-<pre>if (-not (Test-Path ~/avd-liquidware)) { git clone https://github.com/nickprignano/avd-liquidware.git ~/avd-liquidware }
+<pre>if (-not (Test-Path ~/avd-liquidware)) { git clone https://github.com/avd-ops/avd-liquidware.git ~/avd-liquidware }
 Set-Location ~/avd-liquidware; git checkout -q main; git pull -q --ff-only
 Invoke-Pester -Path ./tests -CI</pre>
 
 <h2 id="links">Links</h2>
 <p class="actions">
-<a class="cta" href="https://github.com/nickprignano/avd-liquidware">Repository on GitHub</a>
-<a class="cta ghost" href="https://github.com/nickprignano/avd-liquidware/blob/main/docs/spec.md">Tier Architecture Spec</a>
-<a class="cta ghost" href="https://github.com/nickprignano/avd-liquidware/blob/main/docs/deploy-spec.md">Deployment Spec</a>
+<a class="cta" href="https://github.com/avd-ops/avd-liquidware">Repository on GitHub</a>
+<a class="cta ghost" href="https://github.com/avd-ops/avd-liquidware/blob/main/docs/spec.md">Tier Architecture Spec</a>
+<a class="cta ghost" href="https://github.com/avd-ops/avd-liquidware/blob/main/docs/deploy-spec.md">Deployment Spec</a>
 <a class="cta ghost" href="../docs/avd/fit-with-avd-and-fslogix.html">Fit with AVD &amp; FSLogix</a>
 </p>
 </div>

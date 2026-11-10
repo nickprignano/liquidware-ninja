@@ -30,4 +30,4 @@ Then, if they exist: point the Hub at the Database appliance, and register each 
 Hub from the Collector's console ([appliances.md](appliances.md)).
 
 Until the API covers these, this stays a checklist in the
-[Stratusphere README](https://github.com/nickprignano/avd-liquidware/blob/main/stratusphere/README.md).
+[Stratusphere README](https://github.com/avd-ops/avd-liquidware/blob/main/stratusphere/README.md).

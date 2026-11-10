@@ -38,7 +38,7 @@ explains it; errors with an exact message are in
 - Images without a domain can't grant a domain service account "log on as a service"; ProfileUnity
   6.9.5 can run its startup service as LocalSystem instead
   ([support article](https://support.liquidware.com/hc/en-us/articles/45857909352205-Running-ProfileUnity-and-FlexApps-at-boot-using-a-Service-Account),
-  [tier spec, facts](https://github.com/nickprignano/avd-liquidware/blob/main/docs/spec.md#12-facts-and-what-is-still-unverified)).
+  [tier spec, facts](https://github.com/avd-ops/avd-liquidware/blob/main/docs/spec.md#12-facts-and-what-is-still-unverified)).
 - On multi-session AVD with FlexApp through app attach or RemoteApp, a second user on the same host
   can get no FlexApp ([known errors](../troubleshooting/README.md)).
 - Cached `.msi` files under `C:\Windows\Installer` often have their embedded `MSCF` cabinet streams
@@ -49,7 +49,7 @@ explains it; errors with an exact message are in
   ([avd/fit-with-avd-and-fslogix.md](../avd/fit-with-avd-and-fslogix.md)).
 - The tier resource group holds the only copy of the live ProfileUnity configuration, the FlexApp
   packages and the console. Copy them out and check the copy before `Cleanup`, which refuses
-  without `-DiscardLastCopy` ([deploy spec section 11](https://github.com/nickprignano/avd-liquidware/blob/main/docs/deploy-spec.md#11-actions)).
+  without `-DiscardLastCopy` ([deploy spec section 11](https://github.com/avd-ops/avd-liquidware/blob/main/docs/deploy-spec.md#11-actions)).
 
 ## Any Azure lab
 

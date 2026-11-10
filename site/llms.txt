@@ -50,7 +50,7 @@ contribute, open a KB feedback or known-error issue; changes land only through r
 - [0002. MIT for the repo; the knowledge base tooling keeps Apache-2.0](docs/knowledge/decisions/0002-mit-license-apache-kb-tooling.md): accepted
 - [0003. This repo deploys the Liquidware platform; assessment and design live elsewhere](docs/knowledge/decisions/0003-deploy-here-assess-and-design-elsewhere.md): proposed
 - [0004. Deploy appliances from Azure Marketplace; no Liquidware binaries or license material in the repo](docs/knowledge/decisions/0004-marketplace-appliances-no-vendor-binaries.md): proposed
-- [0005. Bicep with pinned Azure Verified Modules, following avd-landing-zone](docs/knowledge/decisions/0005-bicep-with-azure-verified-modules.md): proposed
+- [0005. Bicep with pinned Azure Verified Modules alongside native Terraform (`~> 4.0`)](docs/knowledge/decisions/0005-bicep-with-azure-verified-modules.md): accepted
 - [0006. Generated credentials go to Key Vault, and reruns reuse them](docs/knowledge/decisions/0006-credentials-in-key-vault.md): proposed
 - [0007. Real runs are the source of truth; every lesson adds a guard](docs/knowledge/decisions/0007-real-runs-are-the-source-of-truth.md): proposed
 - [0008. Everything runs from Azure Cloud Shell](docs/knowledge/decisions/0008-cloud-shell-baseline.md): proposed

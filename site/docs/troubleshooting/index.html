@@ -99,6 +99,12 @@
 <td data-label="Fix">Install shared runtimes (VC++, .NET, WebView2) in the session host golden image and bundle app-specific prerequisites (pinned JRE, Crystal Reports, ODBC drivers) as pre-install steps in a composite FlexApp capture</td>
 <td data-label="Source"><a href="../flexapp/packaging-and-delivery.html#server-evaluation-package-conversion-and-headless-qa">packaging-and-delivery.md</a></td>
 </tr>
+<tr>
+<td data-label="Symptom">terraform validate fails on azurerm_windows_virtual_machine (enable_automatic_updates), azurerm_private_dns_zone_virtual_network_link (private_dns_zone_name), and azurerm_storage_container (.resource_manager_id) when required_providers uses &gt;= 4.0</td>
+<td data-label="Cause">Unbounded &gt;= 4.0 pulls hashicorp/azurerm v5.x in CI, which removed v4 arguments and attributes in favor of v5 schema replacements</td>
+<td data-label="Fix">Pin hashicorp/azurerm to ~&gt; 4.0 in versions.tf until intentionally migrating to the v5 provider schema</td>
+<td data-label="Source"><a href="../deployment/gotchas.html#any-azure-lab">gotchas.md</a></td>
+</tr>
 </tbody></table></div>
 <!-- END GENERATED: known-errors -->
 </section>
