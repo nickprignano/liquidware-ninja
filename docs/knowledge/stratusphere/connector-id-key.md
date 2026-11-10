@@ -15,7 +15,7 @@ sources:
 
 The Connector ID Key is Stratusphere's agent on each desktop. It calls back to the Hub (or a
 Collector) with what it measures. This repo rolls it out with
-[`Deploy-CidKey.ps1`](https://github.com/nickprignano/avd-liquidware/blob/main/stratusphere/docs/agent-rollout.md); this page holds the facts.
+[`Deploy-CidKey.ps1`](https://github.com/avd-ops/avd-liquidware/blob/main/stratusphere/docs/agent-rollout.md); this page holds the facts.
 Everything here cites Liquidware's support center or documentation; none of it has been through a
 lab run on real machines yet. Paths and the settings key changed in 6.7, so check the version.
 

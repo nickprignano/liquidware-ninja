@@ -35,4 +35,4 @@ offer `stratusphere`. Three things have to line up before a VM deploys.
 - A VM's plan can't change after creation.
 - Liquidware also offers a VHD download; deploying from it isn't covered here yet.
 
-How-to: [stratusphere/docs/marketplace.md](https://github.com/nickprignano/avd-liquidware/blob/main/stratusphere/docs/marketplace.md).
+How-to: [stratusphere/docs/marketplace.md](https://github.com/avd-ops/avd-liquidware/blob/main/stratusphere/docs/marketplace.md).

@@ -48,4 +48,4 @@ Routing and NSG behavior: Microsoft's [traffic routing](https://learn.microsoft.
 [NSG](https://learn.microsoft.com/azure/virtual-network/network-security-groups-overview#security-rules) (rules processed in priority order until one matches) docs.
 
 The preflight checks all of this:
-[stratusphere/docs/preflight.md](https://github.com/nickprignano/avd-liquidware/blob/main/stratusphere/docs/preflight.md).
+[stratusphere/docs/preflight.md](https://github.com/avd-ops/avd-liquidware/blob/main/stratusphere/docs/preflight.md).

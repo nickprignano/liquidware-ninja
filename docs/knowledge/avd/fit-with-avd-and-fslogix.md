@@ -10,8 +10,8 @@ last_reviewed: 2026-10-29
 
 Each Liquidware product adds one job next to what AVD already does; none replaces FSLogix as the
 profile container. The full design, with every fact's source, is the tier spec's
-[product ownership section](https://github.com/nickprignano/avd-liquidware/blob/main/docs/spec.md#4-which-product-owns-what) and its
-[facts table](https://github.com/nickprignano/avd-liquidware/blob/main/docs/spec.md#12-facts-and-what-is-still-unverified). FSLogix itself is the AVD
+[product ownership section](https://github.com/avd-ops/avd-liquidware/blob/main/docs/spec.md#4-which-product-owns-what) and its
+[facts table](https://github.com/avd-ops/avd-liquidware/blob/main/docs/spec.md#12-facts-and-what-is-still-unverified). FSLogix itself is the AVD
 knowledge base's topic ([family.yaml](../family.yaml)); link there for FSLogix behavior.
 
 | Job | AVD or Microsoft owns | Liquidware adds | Rule |

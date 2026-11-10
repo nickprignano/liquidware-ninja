@@ -62,7 +62,7 @@ kb_page = "liquidware/community-projects.md"
 [[source]]
 name = "Companion repo: avd-liquidware commits"
 kind = "github_commits"
-repo = "nickprignano/avd-liquidware"
+repo = "avd-ops/avd-liquidware"
 kb_page = "avd/fit-with-avd-and-fslogix.md"
 
 # --- The family's format -------------------------------------------------------

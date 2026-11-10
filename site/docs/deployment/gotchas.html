@@ -66,7 +66,7 @@ of <code>AppData\Local</code> (<a href="../avd/fit-with-avd-and-fslogix.html">av
 <li>Images without a domain can&#39;t grant a domain service account &quot;log on as a service&quot;; ProfileUnity
 6.9.5 can run its startup service as LocalSystem instead
 (<a href="https://support.liquidware.com/hc/en-us/articles/45857909352205-Running-ProfileUnity-and-FlexApps-at-boot-using-a-Service-Account">support article</a>,
-<a href="https://github.com/nickprignano/avd-liquidware/blob/main/docs/spec.md#12-facts-and-what-is-still-unverified">tier spec, facts</a>).</li>
+<a href="https://github.com/avd-ops/avd-liquidware/blob/main/docs/spec.md#12-facts-and-what-is-still-unverified">tier spec, facts</a>).</li>
 <li>On multi-session AVD with FlexApp through app attach or RemoteApp, a second user on the same host
 can get no FlexApp (<a href="../troubleshooting/index.html">known errors</a>).</li>
 <li>Cached <code>.msi</code> files under <code>C:\Windows\Installer</code> often have their embedded <code>MSCF</code> cabinet streams
@@ -77,7 +77,7 @@ and verify captured layers don&#39;t exit with <code>0xC0000135</code> (<code>ST
 (<a href="../avd/fit-with-avd-and-fslogix.html">avd/fit-with-avd-and-fslogix.md</a>).</li>
 <li>The tier resource group holds the only copy of the live ProfileUnity configuration, the FlexApp
 packages and the console. Copy them out and check the copy before <code>Cleanup</code>, which refuses
-without <code>-DiscardLastCopy</code> (<a href="https://github.com/nickprignano/avd-liquidware/blob/main/docs/deploy-spec.md#11-actions">deploy spec section 11</a>).</li>
+without <code>-DiscardLastCopy</code> (<a href="https://github.com/avd-ops/avd-liquidware/blob/main/docs/deploy-spec.md#11-actions">deploy spec section 11</a>).</li>
 </ul>
 </section>
 <section class="screen" id="any-azure-lab">
@@ -85,9 +85,17 @@ without <code>-DiscardLastCopy</code> (<a href="https://github.com/nickprignano/
 <ul>
 <li>Stopped isn&#39;t deallocated, and NAT Gateway, Bastion, public IPs and disks bill regardless
 (<a href="../azure/lab-costs.html">azure/lab-costs.md</a>).</li>
+<li>When maintaining Bicep and Terraform side by side (<code>avd-liquidware</code> <code>-Engine Bicep|Terraform</code>), pin
+<code>hashicorp/azurerm</code> to <code>~&gt; 4.0</code> (v5.0 removes <code>enable_automatic_updates</code>, <code>.resource_manager_id</code> on
+storage containers, and <code>private_dns_zone_name</code> on DNS zone VNet links), account for 0-indexed
+usable hosts in Bicep <code>cidrHost(prefix, 3)</code> vs network-address indexing in Terraform
+<code>cidrhost(prefix, 4)</code>, and use singular <code>sourceAddressPrefix</code> / <code>source_address_prefix</code> when
+<code>callbackSourcePrefixes</code> has a single service tag like <code>VirtualNetwork</code>
+(<a href="../decisions/0005-bicep-with-azure-verified-modules.html">decisions/0005</a>,
+<a href="../troubleshooting/index.html">known errors</a>).</li>
 </ul>
-<details class="more linked"><summary>Linked from one page</summary>
-<ul class="backlinks"><li><a href="../index.html">Knowledge base</a></li></ul></details>
+<details class="more linked"><summary>Linked from 2 pages</summary>
+<ul class="backlinks"><li><a href="../index.html">Knowledge base</a></li><li><a href="../troubleshooting/index.html">Known errors</a></li></ul></details>
 </section>
 <nav class="sc-nav" aria-label="Back and next"><div class="in"><a class="sc-back" href="../azure/networking.html" data-page="Networking for Stratusphere in Azure">Back</a><span class="where">Deployment gotchas</span><a class="sc-next" href="../troubleshooting/index.html" data-page="Known errors">Next<span class="pg">: Known errors</span></a></div></nav>
 </article>
