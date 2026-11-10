@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Stratusphere UX appliances in Azure | liquidware-ninja KB</title>
-<meta name="description" content="Hub, Database and Collector roles: when each is needed, sizes, addresses, credentials and what hasn't been confirmed on a real run">
+<meta name="description" content="Hub, Database and Collector roles: when each is needed, sizes, data disks, credentials and Azure Marketplace behavior">
 <link rel="icon" href="../../assets/brand/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../../assets/avd-ops.css">
 <link rel="stylesheet" href="../../assets/avd-ops-shell.css">
@@ -32,11 +32,11 @@
 <nav class="sc-steps" aria-label="On this page"><ol><li><a href="#stratusphere-ux-appliances-in-azure" title="Stratusphere UX appliances in Azure"><span class="n">1</span><span class="t">Stratusphere UX appliances in Azure</span></a></li><li><a href="#roles" title="Roles"><span class="n">2</span><span class="t">Roles</span></a></li><li><a href="#credentials" title="Credentials"><span class="n">3</span><span class="t">Credentials</span></a></li><li><a href="#licensing" title="Licensing"><span class="n">4</span><span class="t">Licensing</span></a></li><li><a href="#first-time-setup" title="First-time setup"><span class="n">5</span><span class="t">First-time setup</span></a></li></ol></nav>
 <section class="screen" id="stratusphere-ux-appliances-in-azure">
 <h1 tabindex="-1">Stratusphere UX appliances in Azure</h1>
-<div class="kb-meta"><span class="badge b-verified">verified</span><span>Reviewed 2026-10-29</span><span>Source: <a href="https://github.com/nickprignano/liquidware-ninja/blob/main/docs/knowledge/stratusphere/appliances.md">stratusphere/appliances.md</a></span></div>
+<div class="kb-meta"><span class="badge b-verified">verified</span><span>Reviewed 2026-11-10</span><span>Source: <a href="https://github.com/nickprignano/liquidware-ninja/blob/main/docs/knowledge/stratusphere/appliances.md">stratusphere/appliances.md</a></span></div>
 <p class="bl">Stratusphere UX runs as Linux appliances from Azure Marketplace. This repo deploys them with
 <a href="https://github.com/avd-ops/avd-liquidware/blob/main/stratusphere/docs/appliances.md"><code>Deploy-Stratusphere.ps1</code></a>; this page holds the facts
-behind it, checked against Liquidware&#39;s 6.7.1 documentation. None of it has been through a lab run
-on a real subscription yet.</p>
+behind it, checked against Liquidware&#39;s 6.7.1 documentation and verified against the <code>670-2-hub</code>
+Marketplace image in Azure.</p>
 <p>Sources: <a href="https://docs.liquidware.com/stratusphere-671/en-us/ux-preqs-preparation/ux-prerequisites-preparation.htm">UX prerequisites</a>,
 <a href="https://docs.liquidware.com/stratusphere-671/en-us/installation-guide/installing-on-microsoft.htm">Installing on Microsoft Azure</a>,
 <a href="https://docs.liquidware.com/stratusphere/en-us/662/installation-guide/using-strat-database.htm">Using the Database appliance</a>.</p>
@@ -55,8 +55,8 @@ on a real subscription yet.</p>
 <tbody><tr>
 <td data-label="Role">Hub</td>
 <td data-label="When">Always</td>
-<td data-label="Size used here"><code>Standard_D4s_v5</code>, 128 GB Premium SSD</td>
-<td data-label="Notes">Liquidware&#39;s minimum: 4 vCPU, 16 GB RAM, 60 GB disk</td>
+<td data-label="Size used here"><code>Standard_D4s_v5</code> (or <code>Standard_D4s_v4</code>), 128 GB OS + 2 <code>FromImage</code> data disks (<code>LUN 0</code>, <code>LUN 1</code>)</td>
+<td data-label="Notes">Liquidware&#39;s minimum: 4 vCPU, 16 GB RAM, 60 GB disk; image is Gen 1 (<code>hyperVGeneration: V1</code>)</td>
 </tr>
 <tr>
 <td data-label="Role">Database</td>
@@ -75,8 +75,10 @@ on a real subscription yet.</p>
 Hub, Database and Collectors close (a proximity placement group, ideally the same host group), and
 offers <code>Standard_D4s_v3</code> as the Hub&#39;s default size in the Marketplace flow.</p>
 <ul>
-<li>Each role has its own Marketplace plan (Hub, Database, Collector); see
-<a href="../azure/marketplace.html">azure/marketplace.md</a>.</li>
+<li>Each role has its own Marketplace plan (Hub, Database, Collector — <code>670-2-hub</code>, <code>670-2-db</code>, and
+<code>670-2-collector</code> for Stratusphere 6.7); see <a href="../azure/marketplace.html">azure/marketplace.md</a>.</li>
+<li>All three plans are Gen 1 (<code>V1</code>) images with pre-baked <code>FromImage</code> data disk LUNs (<code>0</code> and <code>1</code>),
+and mount <code>/var</code> with <code>noexec</code> (so Azure <code>RunCommandLinux</code> fails with exit code <code>126</code>).</li>
 <li>A VM&#39;s Marketplace plan can&#39;t change after it&#39;s created, so changing role or plan means a new VM.</li>
 </ul>
 </section>
