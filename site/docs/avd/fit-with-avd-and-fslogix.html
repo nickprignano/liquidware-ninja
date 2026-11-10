@@ -32,7 +32,7 @@
 <nav class="sc-steps" aria-label="On this page"><ol><li><a href="#how-liquidware-products-fit-with-azure-virtual-desktop-and-fslogix" title="How Liquidware products fit with Azure Virtual Desktop and FSLogix"><span class="n">1</span><span class="t">How Liquidware products fit with Azure Virtual Desktop and FSLogix</span></a></li><li><a href="#facts-worth-knowing" title="Facts worth knowing"><span class="n">2</span><span class="t">Facts worth knowing</span></a></li><li><a href="#not-confirmed-yet" title="Not confirmed yet"><span class="n">3</span><span class="t">Not confirmed yet</span></a></li></ol></nav>
 <section class="screen" id="how-liquidware-products-fit-with-azure-virtual-desktop-and-fslogix">
 <h1 tabindex="-1">How Liquidware products fit with Azure Virtual Desktop and FSLogix</h1>
-<div class="kb-meta"><span class="badge b-partial">partial</span><span>Reviewed 2026-10-29</span><span>Source: <a href="https://github.com/nickprignano/liquidware-ninja/blob/main/docs/knowledge/avd/fit-with-avd-and-fslogix.md">avd/fit-with-avd-and-fslogix.md</a></span></div>
+<div class="kb-meta"><span class="badge b-partial">partial</span><span>Reviewed 2026-11-09</span><span>Source: <a href="https://github.com/nickprignano/liquidware-ninja/blob/main/docs/knowledge/avd/fit-with-avd-and-fslogix.md">avd/fit-with-avd-and-fslogix.md</a></span></div>
 <p class="bl">Each Liquidware product adds one job next to what AVD already does; none replaces FSLogix as the
 profile container. The full design, with every fact&#39;s source, is the tier spec&#39;s
 <a href="https://github.com/avd-ops/avd-liquidware/blob/main/docs/spec.md#4-which-product-owns-what">product ownership section</a> and its
@@ -89,6 +89,10 @@ packages; assigning them to host pools belongs to the landing zone&#39;s own wor
 a VM. Check it against Trusted Launch and the VM size before turning it on.</li>
 <li>ProfileUnity&#39;s cloud storage covers Portability and FlexApp on Azure Blob; FlexDisk, ProfileDisk
 and Folder Redirection aren&#39;t supported on cloud storage (6.8.6 docs; recheck for 6.9.5).</li>
+<li><code>Deploy-LiquidwareTier.ps1</code> dispatches <code>Plan</code>, <code>Check</code>, <code>Deploy</code>, <code>Configure</code>, <code>Promote</code>, <code>Fix</code>,
+and <code>Cleanup</code> across <code>ProfileUnity</code>, <code>FlexApp</code>, <code>Stratusphere</code>, and <code>CommandCTRL</code>, and prices all
+9 billable tier lines (<code>Get-LwCostEstimate</code>) from the Azure Retail Prices API (<code>prices.azure.com</code>)
+before any live run.</li>
 </ul>
 </section>
 <section class="screen" id="not-confirmed-yet">

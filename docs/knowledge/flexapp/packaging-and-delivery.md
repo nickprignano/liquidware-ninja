@@ -3,10 +3,11 @@ title: "FlexApp packaging, VHDX/CimFS and App Attach delivery"
 summary: "How FlexApp packages applications into elastic layers and delivers them natively or through AVD App Attach"
 topic: flexapp
 status: partial
-last_reviewed: 2026-11-08
+last_reviewed: 2026-11-09
 sources:
   - https://docs.liquidware.com/profileunity/en-us/695/flexapp-packaging-console-guide/welcome.htm
   - https://docs.liquidware.com/profileunity/en-us/695/flexapp-packaging-automation-guide/welcome.htm
+  - https://support.liquidware.com/hc/en-us/articles/50196666289421-Known-Issue-FlexApps-Close-When-NET-Is-Updated
 ---
 
 # FlexApp packaging, VHDX/CimFS and App Attach delivery
@@ -49,7 +50,7 @@ When evaluating an existing RDSH or application server for FlexApp migration:
 
 1. **Three-tier layerability classification:**
    - **Blocked or base-image:** Applications that install kernel-mode drivers (`Win32_SystemDriver` / `.sys` under `System32\drivers`), early-boot (`Boot`/`System`) services, print port monitors, EDR sensors, VPN virtual adapters, or core collaboration suites (`Microsoft 365 Apps`, `Teams`, `OneDrive`, `FSLogix`, `ProfileUnity`) belong in the golden image or Intune Win32 rather than a FlexApp layer.
-   - **Shared runtimes (route to golden image):** Visual C++ Redistributables (`2008`-`2022`), `.NET Framework`, `.NET Desktop Runtime`, and `Microsoft Edge WebView2 Runtime` should be installed once in the base image so 30+ FlexApp layers do not duplicate or conflict on side-by-side runtime DLLs.
+   - **Shared runtimes (route to golden image):** Visual C++ Redistributables (`2008`-`2022`), `.NET Framework`, `.NET Desktop Runtime`, and `Microsoft Edge WebView2 Runtime` should be installed once in the base image so 30+ FlexApp layers do not duplicate or conflict on side-by-side runtime DLLs. Patch `.NET` during base-image maintenance windows rather than in-place on live hosts, because updating `.NET` while FlexApp layers are active causes running `.NET`-dependent FlexApps to close ([support article](https://support.liquidware.com/hc/en-us/articles/50196666289421-Known-Issue-FlexApps-Close-When-NET-Is-Updated)).
    - **Layerable and composite layers:** User-mode Win32/x64 apps, `.appv`, and `.msix` packages can be layered directly. When a line-of-business application requires a pinned legacy runtime (such as Oracle JRE 8, SAP Crystal Reports runtime, or an app-specific ODBC driver/DSN) or a coupled Office COM add-in, capture them together in topological order (`prerequisite-runtime` -> `primary-app` -> `companion-addin`) inside a single composite layer.
 2. **Cached MSI pitfall (`C:\Windows\Installer`):** Windows Installer routinely strips embedded `MSCF` cabinet streams from cached `.msi` files under `C:\Windows\Installer`. Always verify that a cached `.msi` still contains an embedded `MSCF` cabinet header before queueing it into unattended `fpa-packager.exe` capture; otherwise resolve the installer from the original `InstallSource` share or vendor media.
 3. **Archive and `.intunewin` inspection:** Do not rely on package filenames for metadata. Parse `AppxManifest.xml` directly from `.appv` and `.msix` ZIP streams (for `Identity`, `Publisher`, `Version`, and entry-point executables) and `IntuneWinPackage/Metadata/Detection.xml` inside `.intunewin` archives.
