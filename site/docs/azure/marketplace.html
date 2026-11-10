@@ -32,29 +32,48 @@
 <nav class="sc-steps" aria-label="On this page"><ol><li><a href="#stratusphere-in-azure-marketplace" title="Stratusphere in Azure Marketplace"><span class="n">1</span><span class="t">Stratusphere in Azure Marketplace</span></a></li><li><a href="#gotchas" title="Gotchas"><span class="n">2</span><span class="t">Gotchas</span></a></li></ol></nav>
 <section class="screen" id="stratusphere-in-azure-marketplace">
 <h1 tabindex="-1">Stratusphere in Azure Marketplace</h1>
-<div class="kb-meta"><span class="badge b-verified">verified</span><span>Reviewed 2026-10-29</span><span>Source: <a href="https://github.com/nickprignano/liquidware-ninja/blob/main/docs/knowledge/azure/marketplace.md">azure/marketplace.md</a></span></div>
+<div class="kb-meta"><span class="badge b-verified">verified</span><span>Reviewed 2026-11-10</span><span>Source: <a href="https://github.com/nickprignano/liquidware-ninja/blob/main/docs/knowledge/azure/marketplace.md">azure/marketplace.md</a></span></div>
 <p class="bl">The appliances are deployed from Liquidware&#39;s Azure Marketplace image: publisher <code>liquidware</code>,
-offer <code>stratusphere</code>. Three things have to line up before a VM deploys.</p>
+offer <code>stratusphere</code>. Four things have to line up before a VM deploys.</p>
 <ol>
 <li><strong>The plan (SKU) offered in your region.</strong> Plan names aren&#39;t on the public listing. List them
 with <code>az vm image list-skus -l &lt;region&gt; -p liquidware -f stratusphere</code>, or
 <code>Get-AzVMImageSku</code>. Liquidware publishes three plans: the Hub, and optional Database and
 Collector plans, available in each region
 (<a href="https://docs.liquidware.com/stratusphere-671/en-us/installation-guide/installing-on-microsoft.htm">Installing on Microsoft Azure</a>).
-The Hub plan is bring-your-own-license. The images are Gen 1 VMs, and Liquidware doesn&#39;t
-support VM extensions or cloud-init on them.</li>
+In <code>centralus</code> (verified on Stratusphere 6.7), the published plans are <code>670-2-hub</code>, <code>670-2-db</code>,
+and <code>670-2-collector</code>. The Hub plan is bring-your-own-license. The images are Gen 1 VMs
+(<code>hyperVGeneration: V1</code>), so Gen 2-only VM series (such as <code>Dasv5</code>/<code>Ddsv5</code>/<code>Dasv6</code>) fail
+deployment with <code>BadRequest: The selected VM size is not valid for the selected image&#39;s hyperVGeneration</code> — choose a SKU whose <code>HyperVGenerations</code> capability includes <code>V1</code> (such as
+<code>Standard_D4s_v5</code>, <code>Standard_D4s_v4</code>, or <code>Standard_D4s_v3</code>).</li>
 <li><strong>A matching <code>plan</code> block.</strong> The image carries a purchase plan, so the VM must send a <code>plan</code>
 (name, publisher, product) that matches its <code>imageReference</code>, or Azure refuses it. The repo&#39;s
 Pester tests guard this.</li>
+<li><strong>Explicit <code>FromImage</code> data disks (<code>LUN 0</code> and <code>LUN 1</code>).</strong> The <code>670-2-hub</code> Marketplace image
+includes two pre-baked data disk images (<code>lun: 0</code> and <code>lun: 1</code>) alongside the OS disk. When
+deploying via ARM or Bicep (including Azure Verified Modules <code>avm/res/compute/virtual-machine</code>),
+passing an empty <code>dataDisks: []</code> array fails with
+<code>InvalidParameter (storageProfile.dataDisks): Keep existing data disks vs. deleting is not supported</code>.
+Every data disk LUN defined in the Marketplace image must be declared with
+<code>createOption: &#39;FromImage&#39;</code>.</li>
 <li><strong>Accepted terms.</strong> Acceptance is per subscription and per plan, and accepting again is harmless:
-<code>az vm image terms accept</code> or <code>Set-AzMarketplaceTerms</code>. It&#39;s done by script, not Bicep: the
-<code>Microsoft.MarketplaceOrdering</code> agreement resource needs the full terms record read back from
-Azure first, which a template can&#39;t do on its own.</li>
+<code>az vm image terms accept</code> or <code>Get-AzMarketplaceTerms ... | Set-AzMarketplaceTerms -Accept</code>
+(in <code>Az.MarketplaceOrdering</code>, pipe <code>$terms</code> into <code>Set-AzMarketplaceTerms -Accept</code> rather than
+combining <code>-Publisher</code>/<code>-Product</code>/<code>-Name</code> with <code>-Terms</code>, which belong to different parameter
+sets). It&#39;s done by script, not Bicep: the <code>Microsoft.MarketplaceOrdering</code> agreement resource
+needs the full terms record read back from Azure first, which a template can&#39;t do on its own.</li>
 </ol>
 </section>
 <section class="screen" id="gotchas">
 <h2 tabindex="-1">Gotchas</h2>
 <ul>
+<li><strong><code>/var</code> is mounted <code>noexec</code> on the appliance:</strong> Liquidware doesn&#39;t support VM extensions or
+cloud-init on Stratusphere appliances, and the 6.7 image mounts <code>/var</code> with the <code>noexec</code> flag.
+Although <code>waagent</code> runs on the appliance, invoking <code>Invoke-AzVMRunCommand</code> (<code>RunShellScript</code> /
+<code>Microsoft.CPlat.Core.RunCommandLinux</code>) fails with exit code <code>126</code> (<code>Permission denied</code> executing
+<code>/var/lib/waagent/Microsoft.CPlat.Core.RunCommandLinux-.../bin/run-command-shim</code>). Use direct
+HTTPS (<code>443</code>) to <code>/lwl/api</code> or SSH (<code>22</code>) from a subnet/jumphost for automation rather than Azure
+VM Run Command.</li>
 <li>An organization that blocks Marketplace purchases, or limits images with Azure Policy, fails the
 deployment at the VM. Check the subscription&#39;s policy before the first run.</li>
 <li>A VM&#39;s plan can&#39;t change after creation.</li>
