@@ -3,11 +3,12 @@ title: "FlexApp packaging, VHDX/CimFS and App Attach delivery"
 summary: "How FlexApp packages applications into elastic layers and delivers them natively or through AVD App Attach"
 topic: flexapp
 status: partial
-last_reviewed: 2026-11-09
+last_reviewed: 2026-11-10
 sources:
   - https://docs.liquidware.com/profileunity/en-us/695/flexapp-packaging-console-guide/welcome.htm
   - https://docs.liquidware.com/profileunity/en-us/695/flexapp-packaging-automation-guide/welcome.htm
   - https://support.liquidware.com/hc/en-us/articles/50196666289421-Known-Issue-FlexApps-Close-When-NET-Is-Updated
+  - https://learn.microsoft.com/azure/virtual-machines/automatic-vm-guest-patching
 ---
 
 # FlexApp packaging, VHDX/CimFS and App Attach delivery
@@ -32,6 +33,7 @@ Never assign the same application through both ProfileUnity's internal FlexApp r
 ## Packaging VM hygiene
 
 - **Match the session host OS build on single-session Windows:** Capture packages on a clean, single-session VM running the exact same Windows feature update as the target session hosts (for example, Windows 11 Enterprise `win11-24h2-ent` for `win11-24h2-avd-m365` hosts).
+- **Use `patchMode: 'AutomaticByOS'` on Windows 11 single-session images in Azure:** Azure Compute rejects `patchMode: 'AutomaticByPlatform'` on `MicrosoftWindowsDesktop:windows-11:win11-24h2-ent` with `InvalidParameter: The selected VM image is not supported for VM Guest patch operations` ([Azure automatic VM guest patching support](https://learn.microsoft.com/azure/virtual-machines/automatic-vm-guest-patching)). Set `windowsConfiguration.patchSettings.patchMode` to `AutomaticByOS` on the packaging VM (unlike the Windows Server 2025 ProfileUnity console VM, which supports `AutomaticByPlatform`) and keep its static NIC address inside `snet-lw-packaging` (`10.61.0.64/27`, default `10.61.0.68`).
 - **Ephemeral packaging VMs:** Create the packaging VM on demand (or revert to a clean snapshot before every capture), never join it to a production session host pool, and destroy it when packaging completes so it does not accrue idle compute charges.
 - **Record a fallback install method:** Every FlexApp package manifest should record its fallback install method (`base-image`, `intune-win32`, or `manual-msi`) in case an application with kernel drivers or unsupported services cannot be layered.
 
