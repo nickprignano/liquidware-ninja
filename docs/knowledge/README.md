@@ -21,7 +21,7 @@ add it to the topic page it belongs to instead of starting a new file.
 | [liquidware/products.md](liquidware/products.md) | Which Liquidware products this KB covers, how our repos divide the work, and where Liquidware publishes docs, support articles and news | verified |
 | [liquidware/upstream.md](liquidware/upstream.md) | Gaps found while automating Stratusphere in Azure, with the evidence, to raise with Liquidware | verified |
 | [stratusphere/api.md](stratusphere/api.md) | The Hub's read-only data API: request shape, inspectors, basis, parameters, authentication, output formats and ecosystem prior art | partial |
-| [stratusphere/appliances.md](stratusphere/appliances.md) | Hub, Database and Collector roles: when each is needed, sizes, addresses, credentials and what hasn't been confirmed on a real run | verified |
+| [stratusphere/appliances.md](stratusphere/appliances.md) | Hub, Database and Collector roles: when each is needed, sizes, data disks, credentials and Azure Marketplace behavior | verified |
 | [stratusphere/connector-id-key.md](stratusphere/connector-id-key.md) | The Stratusphere agent on each desktop: installer switches, callbacks to the Hub, where its services and settings live, and images created later | verified |
 | [stratusphere/hub-setup.md](stratusphere/hub-setup.md) | What has to be set in the Hub console after deployment (license, API user, API allow list) and what might move to the API | verified |
 | [stratusphere/spotcheck-and-sizing.md](stratusphere/spotcheck-and-sizing.md) | How Stratusphere UX data turns into SpotCheck findings, sizing tiers and before/after migration baselines | verified |

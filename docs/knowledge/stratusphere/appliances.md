@@ -1,17 +1,17 @@
 ---
 title: "Stratusphere UX appliances in Azure"
-summary: "Hub, Database and Collector roles: when each is needed, sizes, addresses, credentials and what hasn't been confirmed on a real run"
+summary: "Hub, Database and Collector roles: when each is needed, sizes, data disks, credentials and Azure Marketplace behavior"
 topic: stratusphere
 status: verified
-last_reviewed: 2026-10-29
+last_reviewed: 2026-11-10
 ---
 
 # Stratusphere UX appliances in Azure
 
 Stratusphere UX runs as Linux appliances from Azure Marketplace. This repo deploys them with
 [`Deploy-Stratusphere.ps1`](https://github.com/avd-ops/avd-liquidware/blob/main/stratusphere/docs/appliances.md); this page holds the facts
-behind it, checked against Liquidware's 6.7.1 documentation. None of it has been through a lab run
-on a real subscription yet.
+behind it, checked against Liquidware's 6.7.1 documentation and verified against the `670-2-hub`
+Marketplace image in Azure.
 
 Sources: [UX prerequisites](https://docs.liquidware.com/stratusphere-671/en-us/ux-preqs-preparation/ux-prerequisites-preparation.htm),
 [Installing on Microsoft Azure](https://docs.liquidware.com/stratusphere-671/en-us/installation-guide/installing-on-microsoft.htm),
@@ -21,7 +21,7 @@ Sources: [UX prerequisites](https://docs.liquidware.com/stratusphere-671/en-us/u
 
 | Role | When | Size used here | Notes |
 |---|---|---|---|
-| Hub | Always | `Standard_D4s_v5`, 128 GB Premium SSD | Liquidware's minimum: 4 vCPU, 16 GB RAM, 60 GB disk |
+| Hub | Always | `Standard_D4s_v5` (or `Standard_D4s_v4`), 128 GB OS + 2 `FromImage` data disks (`LUN 0`, `LUN 1`) | Liquidware's minimum: 4 vCPU, 16 GB RAM, 60 GB disk; image is Gen 1 (`hyperVGeneration: V1`) |
 | Database | Above about 1,000 devices at the default 60-minute callback, or more than 1,000 callbacks an hour | `Standard_D4s_v5`, 256 GB | Minimum 4 vCPU, 16 GB RAM, 94 GB disk. Trust is established, then the Hub is joined to it from the Hub's console |
 | Collector | Optional: CID Data Collector (spreads callback load, or takes callbacks the Hub can't), or Network Collector | `Standard_D2s_v5`, 64 GB | Minimum 2 vCPU, 8 GB RAM, 22 GB disk. Each one is added and registered in the Hub's Collector Administration |
 
@@ -29,8 +29,10 @@ Liquidware sizes real deployments with its online Stratusphere Sizing Guide, rec
 Hub, Database and Collectors close (a proximity placement group, ideally the same host group), and
 offers `Standard_D4s_v3` as the Hub's default size in the Marketplace flow.
 
-- Each role has its own Marketplace plan (Hub, Database, Collector); see
-  [azure/marketplace.md](../azure/marketplace.md).
+- Each role has its own Marketplace plan (Hub, Database, Collector — `670-2-hub`, `670-2-db`, and
+  `670-2-collector` for Stratusphere 6.7); see [azure/marketplace.md](../azure/marketplace.md).
+- All three plans are Gen 1 (`V1`) images with pre-baked `FromImage` data disk LUNs (`0` and `1`),
+  and mount `/var` with `noexec` (so Azure `RunCommandLinux` fails with exit code `126`).
 - A VM's Marketplace plan can't change after it's created, so changing role or plan means a new VM.
 
 ## Credentials
