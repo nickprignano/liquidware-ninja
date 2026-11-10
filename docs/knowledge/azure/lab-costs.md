@@ -3,7 +3,7 @@ title: "Lab costs and teardown"
 summary: "What keeps billing while a Stratusphere lab is stopped, and why a lab run ends torn down"
 topic: azure
 status: verified
-last_reviewed: 2026-10-29
+last_reviewed: 2026-11-09
 sources:
   - https://azure.microsoft.com/pricing/details/azure-nat-gateway/
 ---
@@ -18,7 +18,9 @@ the VMs isn't enough on its own.
   ([states and billing](https://learn.microsoft.com/azure/virtual-machines/states-billing#power-states-and-billing)).
   Disks and networking keep billing either way.
 - **Some resources bill while the VMs are off.** A NAT Gateway, Azure Bastion Basic or higher,
-  public IPs and managed disks keep billing whatever the VMs do. Bastion Developer is the exception:
+  public IPs, private endpoints and managed disks keep billing whatever the VMs do. Moreover, the
+  landing zone's budget Lock only deallocates session hosts—it does not stop the ProfileUnity
+  console, the FlexApp packaging VM, or the Stratusphere Hub. Bastion Developer is the exception:
   no hourly or outbound data charge, but one connection at a time and only to VMs in its own VNet
   ([SKU comparison](https://learn.microsoft.com/azure/bastion/bastion-sku-comparison)). Tearing the environment down is the only way to
   stop those.
@@ -27,9 +29,10 @@ the VMs isn't enough on its own.
   script recovers it.
 - **Cheaper console access.** One small desktop peered to the assessment VNet can replace Bastion
   as the way into the consoles. Deallocate it between sittings. The landing zone's opt-in jumpbox
-  ([avd-landing-zone decision 0019](https://github.com/nickprignano/avd-landing-zone/blob/master/build/decisions/0019-jumpbox-bastion-developer.md)) is a Linux VM in the spoke reached through Bastion
+  ([avd-landing-zone decision 0019](https://github.com/avd-ops/avd-landing-zone/blob/master/build/decisions/0019-jumpbox-bastion-developer.md)) is a Linux VM in the spoke reached through Bastion
   Developer. Bastion Developer itself does not follow peering, so it can't reach VMs in a peered
   assessment VNet directly.
 
-Prices change; check the [Azure pricing calculator](https://azure.microsoft.com/pricing/calculator/)
-rather than recording figures here.
+Prices change; `Get-LwCostEstimate -QueryRetailApi` queries `prices.azure.com` for the target region
+before any live run, or check the [Azure pricing calculator](https://azure.microsoft.com/pricing/calculator/)
+rather than recording static figures in prose.

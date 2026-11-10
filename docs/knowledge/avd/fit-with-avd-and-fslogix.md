@@ -3,7 +3,7 @@ title: "How Liquidware products fit with Azure Virtual Desktop and FSLogix"
 summary: "Which job each Liquidware product does next to AVD's own features and FSLogix: profiles, app delivery, support and assessment"
 topic: avd
 status: partial
-last_reviewed: 2026-10-29
+last_reviewed: 2026-11-09
 ---
 
 # How Liquidware products fit with Azure Virtual Desktop and FSLogix
@@ -31,6 +31,10 @@ knowledge base's topic ([family.yaml](../family.yaml)); link there for FSLogix b
   a VM. Check it against Trusted Launch and the VM size before turning it on.
 - ProfileUnity's cloud storage covers Portability and FlexApp on Azure Blob; FlexDisk, ProfileDisk
   and Folder Redirection aren't supported on cloud storage (6.8.6 docs; recheck for 6.9.5).
+- `Deploy-LiquidwareTier.ps1` dispatches `Plan`, `Check`, `Deploy`, `Configure`, `Promote`, `Fix`,
+  and `Cleanup` across `ProfileUnity`, `FlexApp`, `Stratusphere`, and `CommandCTRL`, and prices all
+  9 billable tier lines (`Get-LwCostEstimate`) from the Azure Retail Prices API (`prices.azure.com`)
+  before any live run.
 
 ## Not confirmed yet
 

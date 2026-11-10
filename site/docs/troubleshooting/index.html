@@ -105,6 +105,12 @@
 <td data-label="Fix">Pin hashicorp/azurerm to ~&gt; 4.0 in versions.tf until intentionally migrating to the v5 provider schema</td>
 <td data-label="Source"><a href="../deployment/gotchas.html#any-azure-lab">gotchas.md</a></td>
 </tr>
+<tr>
+<td data-label="Symptom">Running FlexApp applications unexpectedly close when .NET is updated on an active session host</td>
+<td data-label="Cause">An in-place .NET runtime update on a live host unloads or replaces shared .NET assemblies while virtualized FlexApp processes are bound to them</td>
+<td data-label="Fix">Maintain and patch .NET Framework and .NET Desktop Runtime in the golden base image during drained maintenance windows rather than updating .NET in-place during active user sessions</td>
+<td data-label="Source"><a href="https://support.liquidware.com/hc/en-us/articles/50196666289421-Known-Issue-FlexApps-Close-When-NET-Is-Updated">link</a></td>
+</tr>
 </tbody></table></div>
 <!-- END GENERATED: known-errors -->
 </section>

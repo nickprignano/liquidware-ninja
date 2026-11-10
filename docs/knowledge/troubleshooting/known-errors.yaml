@@ -83,3 +83,11 @@ errors:
   applies_to: Terraform modules in avd-liquidware (profileunity/terraform and stratusphere/terraform)
   status: verified
   added: '2026-11-08'
+- id: flexapp-closes-on-dotnet-update
+  symptom: Running FlexApp applications unexpectedly close when .NET is updated on an active session host
+  cause: An in-place .NET runtime update on a live host unloads or replaces shared .NET assemblies while virtualized FlexApp processes are bound to them
+  fix: Maintain and patch .NET Framework and .NET Desktop Runtime in the golden base image during drained maintenance windows rather than updating .NET in-place during active user sessions
+  source: https://support.liquidware.com/hc/en-us/articles/50196666289421-Known-Issue-FlexApps-Close-When-NET-Is-Updated
+  applies_to: ProfileUnity FlexApp layers depending on .NET runtimes
+  status: verified
+  added: '2026-11-09'

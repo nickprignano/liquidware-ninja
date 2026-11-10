@@ -32,7 +32,7 @@
 <nav class="sc-steps" aria-label="On this page"><ol><li><a href="#deployment-gotchas" title="Deployment gotchas"><span class="n">1</span><span class="t">Deployment gotchas</span></a></li><li><a href="#stratusphere-ux" title="Stratusphere UX"><span class="n">2</span><span class="t">Stratusphere UX</span></a></li><li><a href="#profileunity-flexapp-and-commandctrl" title="ProfileUnity, FlexApp and CommandCTRL"><span class="n">3</span><span class="t">ProfileUnity, FlexApp and CommandCTRL</span></a></li><li><a href="#any-azure-lab" title="Any Azure lab"><span class="n">4</span><span class="t">Any Azure lab</span></a></li></ol></nav>
 <section class="screen" id="deployment-gotchas">
 <h1 tabindex="-1">Deployment gotchas</h1>
-<div class="kb-meta"><span class="badge b-verified">verified</span><span>Reviewed 2026-11-08</span><span>Source: <a href="https://github.com/nickprignano/liquidware-ninja/blob/main/docs/knowledge/deployment/gotchas.md">deployment/gotchas.md</a></span></div>
+<div class="kb-meta"><span class="badge b-verified">verified</span><span>Reviewed 2026-11-09</span><span>Source: <a href="https://github.com/nickprignano/liquidware-ninja/blob/main/docs/knowledge/deployment/gotchas.md">deployment/gotchas.md</a></span></div>
 <p class="bl">The short list to read before a deployment. Each line links to the page or known error that
 explains it; errors with an exact message are in
 <a href="https://github.com/nickprignano/liquidware-ninja/blob/main/docs/knowledge/troubleshooting/known-errors.yaml">known-errors.yaml</a>.</p>
@@ -53,7 +53,7 @@ is the appliance&#39;s SSH login; the web console&#39;s <code>ssadmin</code> def
 (<a href="../stratusphere/hub-setup.html">stratusphere/hub-setup.md</a>).</li>
 <li>The Hub and the Database appliance hold the only copy of the assessment data: removing either
 deletes it. Export first; <code>Cleanup</code> refuses without <code>-DiscardLastCopy</code>
-(<a href="https://github.com/nickprignano/avd-second-brain/blob/main/docs/knowledge/decisions/0016-never-delete-the-last-copy.md">avd-second-brain decision 0016</a>).</li>
+(<a href="https://github.com/avd-ops/avd-second-brain/blob/main/docs/knowledge/decisions/0016-never-delete-the-last-copy.md">avd-second-brain decision 0016</a>).</li>
 </ul>
 </section>
 <section class="screen" id="profileunity-flexapp-and-commandctrl">
@@ -69,6 +69,8 @@ of <code>AppData\Local</code> (<a href="../avd/fit-with-avd-and-fslogix.html">av
 <a href="https://github.com/avd-ops/avd-liquidware/blob/main/docs/spec.md#12-facts-and-what-is-still-unverified">tier spec, facts</a>).</li>
 <li>On multi-session AVD with FlexApp through app attach or RemoteApp, a second user on the same host
 can get no FlexApp (<a href="../troubleshooting/index.html">known errors</a>).</li>
+<li>Updating <code>.NET</code> in-place on a live session host closes running FlexApps; patch <code>.NET</code> in the base
+image during drained maintenance windows (<a href="../troubleshooting/index.html">known errors</a>).</li>
 <li>Cached <code>.msi</code> files under <code>C:\Windows\Installer</code> often have their embedded <code>MSCF</code> cabinet streams
 stripped by Windows; check for an embedded CAB before queueing them for unattended FlexApp capture,
 and verify captured layers don&#39;t exit with <code>0xC0000135</code> (<code>STATUS_DLL_NOT_FOUND</code>) on launch

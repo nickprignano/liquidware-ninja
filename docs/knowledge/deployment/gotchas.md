@@ -3,7 +3,7 @@ title: "Deployment gotchas"
 summary: "What trips up a Liquidware deployment in Azure, across products, with a link to where each is explained"
 topic: deployment
 status: verified
-last_reviewed: 2026-11-08
+last_reviewed: 2026-11-09
 ---
 
 # Deployment gotchas
@@ -27,7 +27,7 @@ explains it; errors with an exact message are in
   ([stratusphere/hub-setup.md](../stratusphere/hub-setup.md)).
 - The Hub and the Database appliance hold the only copy of the assessment data: removing either
   deletes it. Export first; `Cleanup` refuses without `-DiscardLastCopy`
-  ([avd-second-brain decision 0016](https://github.com/nickprignano/avd-second-brain/blob/main/docs/knowledge/decisions/0016-never-delete-the-last-copy.md)).
+  ([avd-second-brain decision 0016](https://github.com/avd-ops/avd-second-brain/blob/main/docs/knowledge/decisions/0016-never-delete-the-last-copy.md)).
 
 ## ProfileUnity, FlexApp and CommandCTRL
 
@@ -41,6 +41,8 @@ explains it; errors with an exact message are in
   [tier spec, facts](https://github.com/avd-ops/avd-liquidware/blob/main/docs/spec.md#12-facts-and-what-is-still-unverified)).
 - On multi-session AVD with FlexApp through app attach or RemoteApp, a second user on the same host
   can get no FlexApp ([known errors](../troubleshooting/README.md)).
+- Updating `.NET` in-place on a live session host closes running FlexApps; patch `.NET` in the base
+  image during drained maintenance windows ([known errors](../troubleshooting/README.md)).
 - Cached `.msi` files under `C:\Windows\Installer` often have their embedded `MSCF` cabinet streams
   stripped by Windows; check for an embedded CAB before queueing them for unattended FlexApp capture,
   and verify captured layers don't exit with `0xC0000135` (`STATUS_DLL_NOT_FOUND`) on launch

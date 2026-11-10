@@ -31,7 +31,7 @@
 <article class="screens">
 <section class="screen" id="lab-costs-and-teardown">
 <h1 tabindex="-1">Lab costs and teardown</h1>
-<div class="kb-meta"><span class="badge b-verified">verified</span><span>Reviewed 2026-10-29</span><span>Source: <a href="https://github.com/nickprignano/liquidware-ninja/blob/main/docs/knowledge/azure/lab-costs.md">azure/lab-costs.md</a></span></div>
+<div class="kb-meta"><span class="badge b-verified">verified</span><span>Reviewed 2026-11-09</span><span>Source: <a href="https://github.com/nickprignano/liquidware-ninja/blob/main/docs/knowledge/azure/lab-costs.md">azure/lab-costs.md</a></span></div>
 <p class="bl">A lab run ends with the environment torn down, or with everything deallocated that can be. Stopping
 the VMs isn&#39;t enough on its own.</p>
 <ul>
@@ -40,7 +40,9 @@ billed. Stop it from Azure so it&#39;s deallocated
 (<a href="https://learn.microsoft.com/azure/virtual-machines/states-billing#power-states-and-billing">states and billing</a>).
 Disks and networking keep billing either way.</li>
 <li><strong>Some resources bill while the VMs are off.</strong> A NAT Gateway, Azure Bastion Basic or higher,
-public IPs and managed disks keep billing whatever the VMs do. Bastion Developer is the exception:
+public IPs, private endpoints and managed disks keep billing whatever the VMs do. Moreover, the
+landing zone&#39;s budget Lock only deallocates session hosts—it does not stop the ProfileUnity
+console, the FlexApp packaging VM, or the Stratusphere Hub. Bastion Developer is the exception:
 no hourly or outbound data charge, but one connection at a time and only to VMs in its own VNet
 (<a href="https://learn.microsoft.com/azure/bastion/bastion-sku-comparison">SKU comparison</a>). Tearing the environment down is the only way to
 stop those.</li>
@@ -49,12 +51,13 @@ retention period, and its name can&#39;t be reused until it&#39;s recovered or p
 script recovers it.</li>
 <li><strong>Cheaper console access.</strong> One small desktop peered to the assessment VNet can replace Bastion
 as the way into the consoles. Deallocate it between sittings. The landing zone&#39;s opt-in jumpbox
-(<a href="https://github.com/nickprignano/avd-landing-zone/blob/master/build/decisions/0019-jumpbox-bastion-developer.md">avd-landing-zone decision 0019</a>) is a Linux VM in the spoke reached through Bastion
+(<a href="https://github.com/avd-ops/avd-landing-zone/blob/master/build/decisions/0019-jumpbox-bastion-developer.md">avd-landing-zone decision 0019</a>) is a Linux VM in the spoke reached through Bastion
 Developer. Bastion Developer itself does not follow peering, so it can&#39;t reach VMs in a peered
 assessment VNet directly.</li>
 </ul>
-<p>Prices change; check the <a href="https://azure.microsoft.com/pricing/calculator/">Azure pricing calculator</a>
-rather than recording figures here.</p>
+<p>Prices change; <code>Get-LwCostEstimate -QueryRetailApi</code> queries <code>prices.azure.com</code> for the target region
+before any live run, or check the <a href="https://azure.microsoft.com/pricing/calculator/">Azure pricing calculator</a>
+rather than recording static figures in prose.</p>
 <details class="more linked"><summary>Linked from 3 pages</summary>
 <ul class="backlinks"><li><a href="../index.html">Knowledge base</a></li><li><a href="networking.html">Networking for Stratusphere in Azure</a></li><li><a href="../deployment/gotchas.html">Deployment gotchas</a></li></ul></details>
 </section>
