@@ -93,6 +93,11 @@ and Folder Redirection aren&#39;t supported on cloud storage (6.8.6 docs; rechec
 and <code>Cleanup</code> across <code>ProfileUnity</code>, <code>FlexApp</code>, <code>Stratusphere</code>, and <code>CommandCTRL</code>, and prices all
 9 billable tier lines (<code>Get-LwCostEstimate</code>) from the Azure Retail Prices API (<code>prices.azure.com</code>)
 before any live run.</li>
+<li>For estate posture and <code>status.avd-ops.dev</code> / <code>avd-buddy</code> integration (Slice B6), <code>Get-LwEstateFact</code>
+emits the public-safe <code>liquidware-estate-facts/v1</code> extension block for Contract <code>C11</code>
+(<code>liquidware.version</code>, <code>liquidware.profileunity.config</code> as <code>name</code>, <code>ring</code>, <code>iniSha256</code>, and
+<code>promotedUtc</code>, <code>liquidware.flexapp.assignments</code>, and <code>liquidware.stratusphere.windowEnd</code>) without
+exposing host or user names.</li>
 </ul>
 </section>
 <section class="screen" id="not-confirmed-yet">

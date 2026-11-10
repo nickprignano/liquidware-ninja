@@ -35,6 +35,11 @@ knowledge base's topic ([family.yaml](../family.yaml)); link there for FSLogix b
   and `Cleanup` across `ProfileUnity`, `FlexApp`, `Stratusphere`, and `CommandCTRL`, and prices all
   9 billable tier lines (`Get-LwCostEstimate`) from the Azure Retail Prices API (`prices.azure.com`)
   before any live run.
+- For estate posture and `status.avd-ops.dev` / `avd-buddy` integration (Slice B6), `Get-LwEstateFact`
+  emits the public-safe `liquidware-estate-facts/v1` extension block for Contract `C11`
+  (`liquidware.version`, `liquidware.profileunity.config` as `name`, `ring`, `iniSha256`, and
+  `promotedUtc`, `liquidware.flexapp.assignments`, and `liquidware.stratusphere.windowEnd`) without
+  exposing host or user names.
 
 ## Not confirmed yet
 

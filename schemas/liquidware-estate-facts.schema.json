@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/nickprignano/liquidware-ninja/schemas/liquidware-estate-facts.schema.json",
+  "title": "Liquidware C11 Estate Facts Extension (liquidware-estate-facts/v1)",
+  "description": "Slice B6 extension block for Contract C11 (avd-estate-facts/v1): liquidware.version, liquidware.profileunity.config, liquidware.flexapp.assignments, and liquidware.stratusphere.windowEnd.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "version",
+    "profileunity",
+    "flexapp"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "liquidware-estate-facts/v1"
+    },
+    "version": {
+      "type": "string",
+      "description": "Installed Liquidware ProfileUnity / FlexApp version across the tier (e.g. 6.9.5)."
+    },
+    "profileunity": {
+      "type": "object",
+      "required": [
+        "config"
+      ],
+      "properties": {
+        "config": {
+          "type": "object",
+          "required": [
+            "name",
+            "ring",
+            "iniSha256",
+            "promotedUtc"
+          ],
+          "properties": {
+            "name": { "type": "string" },
+            "ring": { "type": "string", "enum": ["QA", "All", "None"] },
+            "iniSha256": { "type": "string", "pattern": "^([a-f0-9]{64}|)$" },
+            "promotedUtc": { "type": "string" }
+          }
+        }
+      }
+    },
+    "flexapp": {
+      "type": "object",
+      "required": [
+        "assignments"
+      ],
+      "properties": {
+        "assignments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "app",
+              "version",
+              "ring",
+              "deliveryMode"
+            ],
+            "properties": {
+              "app": { "type": "string" },
+              "version": { "type": "string" },
+              "ring": { "type": "string", "enum": ["QA", "All"] },
+              "deliveryMode": { "type": "string", "enum": ["AvdAppAttach", "ProfileUnityFlexApp", "FlexAppOne"] }
+            }
+          }
+        }
+      }
+    },
+    "stratusphere": {
+      "type": "object",
+      "properties": {
+        "windowEnd": { "type": "string" }
+      }
+    }
+  }
+}
